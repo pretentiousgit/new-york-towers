@@ -34,11 +34,12 @@ function draw() {
 }
 
 function basicStory(o = buildingOrigin, size = storyBlock) {
-  console.log('add a story', o, size);
+  // console.log('add a story', o, size);
 
   const baseBlock = rect(...o, ...size);
 
   symmetricSeries(getRandomIntInclusive(1, 7));
+  // symmetricSeries(7);
 
   let c = color(255, 255, 255);
   fill(c);
@@ -63,19 +64,21 @@ function symmetricSeries(quantity = 5, originX = margin + buildingWidth / 2, sty
    column(columnStyle, originX);
   }
 
-  for (let i = 0; i < quantity; i += 1) {
-    const originDistance = (buildingWidth / quantity) * (i + 1);
+  for (let i = 0; i < pairs; i += 1) {
+    const originDistance = (buildingWidth / quantity);
+    console.log('x, originDistance', originX, originDistance);
+    const x1 = originX + originDistance * (i + 1);
+    const x2 = originX - originDistance * (i + 1);
 
-    const x1 = originX + originDistance;
-    const x2 = originX - originDistance;
+    console.log('x1, x2', x1, x2);
 
-    column(columnStyle, x1 * i);
-    column(columnStyle, x2 * i);
+    column(columnStyle, x1);
+    column(columnStyle, x2);
   }
 }
 
 function column(n, x) {
-  console.log('draw a column', n, x);
+  // console.log('draw a column', n, x);
   
   // middle
   let c = color(241, 170, 100);
