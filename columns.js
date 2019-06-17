@@ -26,7 +26,8 @@ function setup() {
 function draw() {
   background(255); // Set the background to black
   // onePaneWindow(150);
-  panelPane(150);
+  const next = panelPane(150);
+  console.log(next);
   // for (let i = 0; i < stories; i += 1) {
   //   const y = i > 0 ?
   //     buildingOrigin[1] - (storyHeight * i + 2) :
@@ -52,38 +53,39 @@ function basicStory(o = buildingOrigin, size = storyBlock, scaleWeight) {
   // baseBlock;
 }
 
-function panelPane(w, x = 10, y = 10, cols = 3, rows =3) {
-  // let pane = [[0, 0]];
+function panelPane(w, x = 10, y = 10, cols = 3, rows = 3) {
+  let pane = matrix(cols, rows);
+  console.log('check pane', pane);
   noFill();
   // frame 
   let frame = basicGoldenRectangle(w);
-  const {x: x1, y: y1, w: w1, h: h1} = frame.outer;
-  const {x: x2, y: y2, w: w2, h: h2} = frame.inner;
+  const { x: x1, y: y1, w: w1, h: h1 } = frame.outer;
+  const { x: x2, y: y2, w: w2, h: h2 } = frame.inner;
   rect(x1, y1, w1, h1);
   rect(x2, y2, w2, h2);
 
   // inject panels
-  let numbers = basicGoldenRectangle(w/cols);
+  let numbers = basicGoldenRectangle(w / cols);
   for (let i = 0; i < cols; i += 1) {
     for (let j = 0; j < rows; j += 1) {
       let posX = x + ((numbers.outer.w) * i);
       let posY = y + ((numbers.outer.h) * j);
 
       numbers = basicGoldenRectangle(w / cols, posX, posY);
-      const {x: x1, y: y1, w: w1, h: h1} = numbers.outer;
-      const {x: x2, y: y2, w: w2, h: h2} = numbers.inner;
+      const { x: x1, y: y1, w: w1, h: h1 } = numbers.outer;
+      const { x: x2, y: y2, w: w2, h: h2 } = numbers.inner;
       rect(x1, y1, w1, h1);
       rect(x2, y2, w2, h2);
-      // pane[i][j] = numbers;
+      pane[i][j] = numbers;
     }
   }
 
-  
+
   // return information about pane?
-  // return {
-  //   topL: [pane[0][0].outer.x, pane[0][0].outer.y],
-  //   bottomR: [pane[3][2].outer.x, pane[0][0].outer.y]
-  // }
+  return {
+    topL: [pane[0][0].outer.x, pane[0][0].outer.y],
+    bottomR: [pane[2][2].outer.x, pane[2][2].outer.y]
+  }
 }
 
 function onePaneWindow(w, x, y) {
@@ -97,12 +99,11 @@ function basicGoldenRectangle(w, x = 10, y = 10) {
   const bits = goldenRatio(w);
   const innerPaneScale = 0.95;
   const paneDiff = (1 - innerPaneScale) / 2;
-  console.log('paneDiff', paneDiff);
-  
-  const outer = {x, y, w: bits.a, h: bits.c };
+
+  const outer = { x, y, w: bits.a, h: bits.c };
   const inner = {
-    x: x + bits.a/2 * paneDiff,
-    y: y + bits.c/2 * paneDiff,
+    x: x + bits.a / 2 * paneDiff,
+    y: y + bits.c / 2 * paneDiff,
     w: bits.a * innerPaneScale,
     h: bits.c * innerPaneScale
   };
@@ -187,6 +188,17 @@ function symmetricSeries(
     element(style, x1, origin[1]);
     element(style, x2, origin[1]);
   }
+}
+
+function matrix(c, r) {
+  const arr = [];
+  for (let i = 0; i < c; i += 1) {
+    arr.push([]);
+    for (let j = 0; j < r; j += 1) {
+      arr[i].push[0]
+    }
+  }
+  return arr;
 }
 
 function range(num) {
