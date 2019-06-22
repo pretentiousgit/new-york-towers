@@ -50,16 +50,18 @@ function basicStory(o = buildingOrigin, size = storyBlock, scaleWeight) {
 
   // things should be symmetric
   // they can also be multiply-defined
-  
+
   symmetricWindowSeries(
-    // getRandomIntInclusive(0, 7),
-    3,
+    getRandomIntInclusive(1, 3),
+    // 3,
     panelStyles[window],
     getRandomIntInclusive(32, 48),
     [margin + buildingWidth / 2,
     o[1] - (10 * scaleWeight)]
   );
 
+  // center line
+  line(margin + buildingWidth / 2, o[1], margin + buildingWidth / 2, storyHeight);
   let c = color(255, 255, 255);
   fill(c);
   stroke(0, 0, 0);
@@ -80,15 +82,14 @@ function symmetricWindowSeries(
   ],
 ) {
 
-  const panelsInWindows = 3;
-  // const panelsInWindows = getRandomIntInclusive(1, 3);
+  // const panelsInWindows = 3;
+  const panelsInWindows = getRandomIntInclusive(1, 3);
   const pairs = (!isEven(quantity)) ?
     (quantity - 1) / 2 :
     quantity / 2;
 
   if (!isEven(quantity)) {
     verticalPaneDef(panelsInWindows, windowType, ...origin, windowWidth);
-    // windowType(width, ...origin);
   }
   for (let i = 0; i < pairs; i += 1) {
     const originDistance = (buildingWidth / quantity);
@@ -96,8 +97,6 @@ function symmetricWindowSeries(
     const x2 = origin[0] - originDistance * (i + 1);
     verticalPaneDef(panelsInWindows, windowType, x1, origin[1], windowWidth);
     verticalPaneDef(panelsInWindows, windowType, x2, origin[1], windowWidth);
-    // windowType(width, x1, origin[1]);
-    // windowType(width, x2, origin[1]);
   }
 }
 
@@ -112,11 +111,13 @@ function verticalPaneDef(number, element, ...etc) {
   if (isEven(number)) {
     // if we have an even number of panels, 
     // panels should emerge left and right around the center of X
-    for (let i = 1; i <= number; i += 1) {
-      if(i === 1) {
-        element(w, x - (w/2), y);
-      } else if (isEven(i)){
-        element(w, x + (i * w), y);
+    for (let i = 0; i < number; i += 1) {
+      if (!isEven(i)) {
+        element(w, x - ((w * i) - w), y);
+        console.log('check x1', x, w, w * i, i)
+      } else {
+        element(w, x + ((w * i) - w), y);
+        console.log('check x2', x, w, w * i, i)
       }
     }
   } else {
@@ -124,11 +125,11 @@ function verticalPaneDef(number, element, ...etc) {
     // and subsequent panels should be to the left and right of the first one
     for (let i = 1; i <= number; i += 1) {
       if (i == 1) { // center first element of an odd series
-        element(w, x + w/2, y); 
+        element(w, x - (w / 2), y);
       } else if (isEven(i)) { // alternate left and right even/odd remainder
-        element(w, x - (i * w), y);
+        element(w, x - (w + w / 2), y);
       } else {
-        element(w, x + (i * w), y);
+        element(w, x + (w + w / 2) - w, y);
       }
     }
   }
