@@ -44,23 +44,20 @@ function draw() {
 }
 
 function basicStory(o = buildingOrigin, size = storyBlock, scaleWeight) {
-  // symmetricSeries(
-  //   [
-  //     margin + buildingWidth / 2,
-  //     o[1] - (10 * scaleWeight)
-  //   ],
-  //   getRandomIntInclusive(1, 7)
-  // );
-
   stroke(0, 0, 0);
   noFill();
   const window = getRandomIntInclusive(0, panelStyles.length);
+
+  // things should be symmetric
+  // they can also be multiply-defined
+  
   symmetricWindowSeries(
-    getRandomIntInclusive(0, 7),
+    // getRandomIntInclusive(0, 7),
+    3,
     panelStyles[window],
-    getRandomIntInclusive(24, 120),
+    getRandomIntInclusive(32, 48),
     [margin + buildingWidth / 2,
-      o[1] - (10 * scaleWeight)]
+    o[1] - (10 * scaleWeight)]
   );
 
   let c = color(255, 255, 255);
@@ -69,142 +66,71 @@ function basicStory(o = buildingOrigin, size = storyBlock, scaleWeight) {
   // baseBlock;
 }
 
-
-function column(n, x, y) {
-  // console.log('draw a column', n, x);
-
-  // middle
-  let c = color(241, 170, 100);
-  fill(c);
-  rect(x - n.middleWidth / 2, y, n.middleWidth, n.middleHeight);
-
-  // capital
-  c = color(63, 191, 191);
-  fill(c);
-  // rect(x - n.footWidth / 2, n.y + n.middleHeight - (n.footHeight * 2), n.footWidth, n.footHeight);
-  rect(x - n.capWidth / 2, y, n.capWidth, n.capHeight);
-
-  // foot
-  c = color(191, 63, 127);
-  fill(c);
-  rect(x - n.footWidth / 2, y + n.middleHeight - n.footHeight, n.footWidth, n.footHeight);
-}
-
-function genColumnNumbers(width = buildingWidth) {
-  // basic would be 32 id a building is 4x, so get number of stories and multiply
-  // these should be skinnier and proportionate to a building story, which is between 10 and 14 ft.
-  const baseMin = 32 / stories;
-  const baseMax = 24 / stories;
-
-  const middleWidth = getRandomIntInclusive(width / 32, width / 24);
-
-  const capHeight = getRandomIntInclusive(middleWidth * 0.25, middleWidth * 3.14);
-  const capWidth = getRandomIntInclusive(middleWidth * 1.1, middleWidth * 2.09);
-
-  const footHeight = getRandomIntInclusive(middleWidth * 0.25, middleWidth * 3.14);
-  const footWidth = getRandomIntInclusive(capWidth * 0.78, capWidth * 1.09);
-
-
-  return {
-    middleWidth,
-    middleHeight: storyHeight,
-    capHeight,
-    capWidth,
-    footHeight,
-    footWidth
-  }
-}
-
 function genVerticalWindowWidths() {
   return getRandomIntInclusive(buildingWidth / 8, buildingWidth / 3);
 }
 
-function symmetricColumnSeries(
-  origin = [
-    margin + buildingWidth / 2,
-    buildingOrigin[1]
-  ],
-  quantity = 5,
-  element = column,
-  sharedElementstyle = genColumnNumbers(buildingWidth / 5),
-  rgb = color(241, 170, 100)) {
-  fill(rgb);
-
-  const pairs = (!isEven(quantity)) ?
-    (quantity - 1) / 2 :
-    quantity / 2;
-
-  if (!isEven(quantity)) {
-    column(sharedElementstyle, ...origin);
-  }
-
-  for (let i = 0; i < pairs; i += 1) {
-    const originDistance = (buildingWidth / quantity);
-    const x1 = origin[0] + originDistance * (i + 1);
-    const x2 = origin[0] - originDistance * (i + 1);
-    column(sharedElementstyle, x1, origin[1]);
-    column(sharedElementstyle, x2, origin[1]);
-  }
-}
-
-function matrix(c, r) {
-  const arr = [];
-  for (let i = 0; i < c; i += 1) {
-    arr.push([]);
-    for (let j = 0; j < r; j += 1) {
-      arr[i].push[0]
-    }
-  }
-  return arr;
-}
-
-function range(num) {
-  const arr = [];
-  for (let i = 0; i < num; i += 1) {
-    arr.push(0);
-  }
-  return arr;
-}
-
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
-}
-
-function isEven(someNumber) {
-  return (someNumber % 2 == 0) ? true : false;
-};
-
-function goldenRatio(number) {
-  return {
-    a: number,
-    b: number * 0.618,
-    c: number * 1.618
-  }
-}
 function symmetricWindowSeries(
   quantity,
-  window = panelPane,
-  width,
+  windowType = panelPane,
+  windowWidth,
   origin = [
     margin + buildingWidth / 2,
     buildingOrigin[1]
   ],
 ) {
+
+  const panelsInWindows = 3;
+  // const panelsInWindows = getRandomIntInclusive(1, 3);
   const pairs = (!isEven(quantity)) ?
     (quantity - 1) / 2 :
     quantity / 2;
 
   if (!isEven(quantity)) {
-    window(width, ...origin);
+    verticalPaneDef(panelsInWindows, windowType, ...origin, windowWidth);
+    // windowType(width, ...origin);
   }
   for (let i = 0; i < pairs; i += 1) {
     const originDistance = (buildingWidth / quantity);
     const x1 = origin[0] + originDistance * (i + 1);
     const x2 = origin[0] - originDistance * (i + 1);
-    window(width, x1, origin[1]);
-    window(width, x2, origin[1]);
+    verticalPaneDef(panelsInWindows, windowType, x1, origin[1], windowWidth);
+    verticalPaneDef(panelsInWindows, windowType, x2, origin[1], windowWidth);
+    // windowType(width, x1, origin[1]);
+    // windowType(width, x2, origin[1]);
+  }
+}
+
+function verticalPaneDef(number, element, ...etc) {
+  /* width is defined per window panel in the group */
+  /* currently, this defines all windows in a symmetric set as being the same width */
+
+  const x = etc[0];
+  const y = etc[1];
+  const w = etc[2];
+
+  if (isEven(number)) {
+    // if we have an even number of panels, 
+    // panels should emerge left and right around the center of X
+    for (let i = 1; i <= number; i += 1) {
+      if(i === 1) {
+        element(w, x - (w/2), y);
+      } else if (isEven(i)){
+        element(w, x + (i * w), y);
+      }
+    }
+  } else {
+    // else the first panel should be centered
+    // and subsequent panels should be to the left and right of the first one
+    for (let i = 1; i <= number; i += 1) {
+      if (i == 1) { // center first element of an odd series
+        element(w, x + w/2, y); 
+      } else if (isEven(i)) { // alternate left and right even/odd remainder
+        element(w, x - (i * w), y);
+      } else {
+        element(w, x + (i * w), y);
+      }
+    }
   }
 }
 
@@ -243,19 +169,19 @@ function panelPane(w, x = 10, y = 10, cols = 3, rows = 3) {
 }
 
 function twoPane(fn, w, x, y) {
-  const openAmount = getRandomIntInclusive(1, 100)/100;
+  const openAmount = getRandomIntInclusive(1, 100) / 100;
   fn(w, x, y);
   console.log('bottom y', openAmount);
-  fn(w, x, y+h);
-} 
+  fn(w, x, y + h);
+}
 
 function squarePaneWindow(w, x = 10, y = 10) {
   const numbers = framedPanel(w, x, y, w);
-  const {outer, inner} = numbers;
-  
+  const { outer, inner } = numbers;
+
   const lower = framedPanel(w, x, outer.h + y, w);
-  const {outer:l_outer, inner: l_inner} = lower;
-  
+  const { outer: l_outer, inner: l_inner } = lower;
+
   rect(outer.x, outer.y, outer.w, outer.h); //outer 
   rect(inner.x, inner.y, inner.w, inner.h); //outer 
   rect(l_outer.x, l_outer.y, l_outer.w, l_outer.h); //outer 
@@ -264,8 +190,8 @@ function squarePaneWindow(w, x = 10, y = 10) {
 
 function onePaneWindow(w, x, y) {
   const numbers = basicGoldenRectangle(w, x, y);
-  const {outer, inner} = numbers;
-  
+  const { outer, inner } = numbers;
+
   rect(outer.x, outer.y, outer.w, outer.h); //outer 
   rect(inner.x, inner.y, inner.w, inner.h); //outer 
 }
