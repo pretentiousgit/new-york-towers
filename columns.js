@@ -1,3 +1,9 @@
+/* 
+  todo:
+  -- we're working on window repetition
+
+*/
+
 let y = 100; // animated line
 
 const canvas = [960, 940]
@@ -26,26 +32,44 @@ function setup() {
 function draw() {
   background(255); // Set the background to black
   // onePaneWindow(150);
-  const next = panelPane(150);
-  console.log(next);
-  // for (let i = 0; i < stories; i += 1) {
-  //   const y = i > 0 ?
-  //     buildingOrigin[1] - (storyHeight * i + 2) :
-  //     buildingOrigin[1];
+  // const next = panelPane(150);
+  // console.log(next);
+  for (let i = 0; i < stories; i += 1) {
+    const y = i > 0 ?
+      buildingOrigin[1] - (storyHeight * i + 2) :
+      buildingOrigin[1];
 
-  //   basicStory([margin, y], storyBlock, i + 1);
-  // }
+    basicStory([margin, y], storyBlock, i + 1);
+  }
 }
 
 function basicStory(o = buildingOrigin, size = storyBlock, scaleWeight) {
-  symmetricSeries(
-    [
-      margin + buildingWidth / 2,
-      o[1] - (10 * scaleWeight)
-    ],
-    getRandomIntInclusive(1, 7)
-  );
-  // symmetricSeries(7);
+  // symmetricSeries(
+  //   [
+  //     margin + buildingWidth / 2,
+  //     o[1] - (10 * scaleWeight)
+  //   ],
+  //   getRandomIntInclusive(1, 7)
+  // );
+  
+/* 
+
+  symmetric element series:
+  - up to X elements of any type of column or window
+  - symmetric series should handle generating the style of the thing?
+  --- style generation is tricky
+  ----- things are symmetric in pairs or 3s or 5s but rarely 7s
+  --- things are _generally_ bookended by a "different" thing
+ 
+*/
+const numbers = genVerticalWindowWidths()
+console.log(numbers);
+panelPane(150, 110, 120);
+
+// symmetricWindowSeries(
+//     7,
+    
+//   );
 
   let c = color(255, 255, 255);
   fill(c);
@@ -53,12 +77,38 @@ function basicStory(o = buildingOrigin, size = storyBlock, scaleWeight) {
   // baseBlock;
 }
 
+function symmetricWindowSeries(
+  quantity,
+  window = panelPane,
+  width,
+  origin = [
+    margin + buildingWidth / 2,
+    buildingOrigin[1]
+  ],
+) {
+  const pairs = (!isEven(quantity)) ?
+    (quantity - 1) / 2 :
+    quantity / 2;
+
+  console.log('widow width', width);
+  if (!isEven(quantity)) {
+    window(width, ...origin);
+  } 
+  for (let i = 0; i < pairs; i += 1) {
+    const originDistance = (buildingWidth / quantity);
+    const x1 = origin[0] + originDistance * (i + 1);
+    const x2 = origin[0] - originDistance * (i + 1);
+    window(width, x1, origin[1]);
+    window(width, x2, origin[1]);
+  }
+}
+
 function panelPane(w, x = 10, y = 10, cols = 3, rows = 3) {
   let pane = matrix(cols, rows);
-  console.log('check pane', pane);
+
   noFill();
   // frame 
-  let frame = basicGoldenRectangle(w);
+  let frame = basicGoldenRectangle(w, x, y);
   const { x: x1, y: y1, w: w1, h: h1 } = frame.outer;
   const { x: x2, y: y2, w: w2, h: h2 } = frame.inner;
   rect(x1, y1, w1, h1);
@@ -79,7 +129,6 @@ function panelPane(w, x = 10, y = 10, cols = 3, rows = 3) {
       pane[i][j] = numbers;
     }
   }
-
 
   // return information about pane?
   return {
@@ -133,13 +182,13 @@ function column(n, x, y) {
   rect(x - n.footWidth / 2, y + n.middleHeight - n.footHeight, n.footWidth, n.footHeight);
 }
 
-function genColumnNumbers(width) {
+function genColumnNumbers(width = buildingWidth) {
   // basic would be 32 id a building is 4x, so get number of stories and multiply
   // these should be skinnier and proportionate to a building story, which is between 10 and 14 ft.
   const baseMin = 32 / stories;
   const baseMax = 24 / stories;
 
-  const middleWidth = getRandomIntInclusive(buildingWidth / 32, buildingWidth / 24);
+  const middleWidth = getRandomIntInclusive(width / 32, width / 24);
 
   const capHeight = getRandomIntInclusive(middleWidth * 0.25, middleWidth * 3.14);
   const capWidth = getRandomIntInclusive(middleWidth * 1.1, middleWidth * 2.09);
@@ -158,35 +207,35 @@ function genColumnNumbers(width) {
   }
 }
 
-function symmetricSeries(
+function genVerticalWindowWidths() {
+  return getRandomIntInclusive(buildingWidth/8, buildingWidth/3);
+}
+
+function symmetricColumnSeries(
   origin = [
     margin + buildingWidth / 2,
     buildingOrigin[1]
   ],
   quantity = 5,
   element = column,
-  style = genColumnNumbers(buildingWidth / 5),
+  sharedElementstyle = genColumnNumbers(buildingWidth / 5),
   rgb = color(241, 170, 100)) {
   fill(rgb);
-
-  // columns are symmetric in pairs
-  // columns can come in odd numbers, in which case they are symmetric around the middle column
 
   const pairs = (!isEven(quantity)) ?
     (quantity - 1) / 2 :
     quantity / 2;
 
   if (!isEven(quantity)) {
-    // odd number - draw symmetric from the inside out with 1 at middle
-    element(style, ...origin);
+    column(sharedElementstyle, ...origin);
   }
 
   for (let i = 0; i < pairs; i += 1) {
     const originDistance = (buildingWidth / quantity);
     const x1 = origin[0] + originDistance * (i + 1);
     const x2 = origin[0] - originDistance * (i + 1);
-    element(style, x1, origin[1]);
-    element(style, x2, origin[1]);
+    column(sharedElementstyle, x1, origin[1]);
+    column(sharedElementstyle, x2, origin[1]);
   }
 }
 
