@@ -30,20 +30,15 @@ function setup() {
 
 function draw() {
   background(255); // Set the background to black
-  
-  fill(0, 124, 124);
-  rect(0, 0, canvas[0],canvas[1]);
-  noFill();
+ 
+  /* Test rectangle for full canvas size onscreen */
+  // fill(0, 124, 124);
+  // rect(0, 0, canvas[0],canvas[1]);
+  // noFill();
 
   for (let i = 0; i < stories; i += 1) {
-    
-    // const y = i > 0 ?
-    //   buildingOrigin[1] - (storyHeight * i + 2) :
-    //   buildingOrigin[1];
-
     const marginLeft = margin;
     const marginTop = y * i;
-    // basicStory([marginLeft, marginTop], buildingWidth, storyHeight, i + 1);
     
     /* reference boxes 1 */
     const lineY =  storyHeight * i;
@@ -52,9 +47,8 @@ function draw() {
     line(0, lineY, buildingWidth * 2, lineY);
     rect(0, lineY, 30, 5);
     
-    // fill(128, 0, 0);
-    // rect(0, y, 30, 5);
-    // line(0, y, buildingWidth * 2, y);
+    fill(128, 0, 0);
+    rect(buildingWidth * 2, lineY + storyHeight, -30, -5);
     /* end reference boxes */
 
   }
