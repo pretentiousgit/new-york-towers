@@ -10,9 +10,11 @@ const canvas = [960, 940]
 const stories = 8;
 
 const buildingWidth = canvas[0] / 2;
-const storyHeight = (canvas[1] - 40) / stories;
+const storyHeight = canvas[1] / stories;
 const margin = (canvas[0] - buildingWidth) / 2; // center the building
+
 const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
+// const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
 const panelStyles = [panelPane, onePaneWindow, squarePaneWindow];
 
@@ -28,24 +30,31 @@ function setup() {
 
 function draw() {
   background(255); // Set the background to black
+  
+  fill(0, 124, 124);
+  rect(0, 0, canvas[0],canvas[1]);
+  noFill();
 
   for (let i = 0; i < stories; i += 1) {
-    const y = i > 0 ?
-      buildingOrigin[1] - (storyHeight * i + 2) :
-      buildingOrigin[1];
+    
+    // const y = i > 0 ?
+    //   buildingOrigin[1] - (storyHeight * i + 2) :
+    //   buildingOrigin[1];
 
     const marginLeft = margin;
     const marginTop = y * i;
-    basicStory([marginLeft, marginTop], buildingWidth, storyHeight, i + 1);
-      
-    /* reference boxes 1 */
-    fill(0, 0, 0);
-    line(0, 0, buildingWidth * 2, 0);
-    rect(buildingWidth * 2, marginTop, -30, 5);
+    // basicStory([marginLeft, marginTop], buildingWidth, storyHeight, i + 1);
     
-    fill(128, 0, 0);
-    rect(0, marginTop, 30, 5);
-    line(0, marginTop, buildingWidth * 2, marginTop);
+    /* reference boxes 1 */
+    const lineY =  storyHeight * i;
+
+    fill(0, 0, 0);
+    line(0, lineY, buildingWidth * 2, lineY);
+    rect(0, lineY, 30, 5);
+    
+    // fill(128, 0, 0);
+    // rect(0, y, 30, 5);
+    // line(0, y, buildingWidth * 2, y);
     /* end reference boxes */
 
   }
