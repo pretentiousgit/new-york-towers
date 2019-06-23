@@ -7,12 +7,9 @@ function symmetricWindowSeries(
   quantity,
   windowType = panelPane,
   windowWidth,
-  origin = [
-    margin + buildingWidth / 2,
-    buildingOrigin[1]
-  ],
+  x,
+  y
 ) {
-
   // const panelsInWindows = 3;
   const panelsInWindows = getRandomIntInclusive(1, 3);
   const pairs = (!isEven(quantity)) ?
@@ -20,14 +17,14 @@ function symmetricWindowSeries(
     quantity / 2;
 
   if (!isEven(quantity)) {
-    verticalPaneDef(panelsInWindows, windowType, ...origin, windowWidth);
+    verticalPaneDef(panelsInWindows, windowType, x, y, windowWidth);
   }
   for (let i = 0; i < pairs; i += 1) {
     const originDistance = (buildingWidth / quantity);
-    const x1 = origin[0] + originDistance * (i + 1);
-    const x2 = origin[0] - originDistance * (i + 1);
-    verticalPaneDef(panelsInWindows, windowType, x1, origin[1], windowWidth);
-    verticalPaneDef(panelsInWindows, windowType, x2, origin[1], windowWidth);
+    const x1 = x + originDistance * (i + 1);
+    const x2 = x - originDistance * (i + 1);
+    verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth);
+    verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth);
   }
 }
 
@@ -35,6 +32,7 @@ function verticalPaneDef(number, element, ...etc) {
   /* width is defined per window panel in the group */
   /* currently, this defines all windows in a symmetric set as being the same width */
 
+  console.log('check etc', etc)
   const x = etc[0];
   const y = etc[1];
   const w = etc[2];

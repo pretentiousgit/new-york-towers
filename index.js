@@ -36,6 +36,9 @@ function draw() {
   // rect(0, 0, canvas[0],canvas[1]);
   // noFill();
 
+  const fireW = getRandomIntInclusive(buildingWidth/3.1415, buildingWidth/1.618);
+  const fireX = getRandomIntInclusive(buildingWidth/3.1415, buildingWidth + fireW);
+
   for (let i = 0; i < stories; i += 1) {
     const marginLeft = margin;
     const marginTop = y * i;
@@ -52,33 +55,31 @@ function draw() {
     /* end reference boxes */
 
     basicStory(
-      buildingWidth / 2,
+      fireW,
       storyHeight,
       buildingOrigin[0],
-      lineY
+      lineY,
+      fireX
     );
   }
 }
 
-function basicStory(w = buildingWidth, h = storyHeight, x, y, scaleWeight) {
+function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, scaleWeight) {
   stroke(0, 0, 0);
   noFill();
-  const window = getRandomIntInclusive(0, panelStyles.length);
+  const window = getRandomIntInclusive(0, panelStyles.length - 1);
 
   // things should be symmetric
   // they can also be multiply-defined
+  fireEscapeLayer(fireW, h, fireX, y);
 
-
-  fireEscapeLayer(w, h, x, y);
-  // rotate(-60);
-  // symmetricWindowSeries(
-  //   getRandomIntInclusive(1, 3),
-  //   // 3,
-  //   panelStyles[window],
-  //   getRandomIntInclusive(32, 48),
-  //   [margin + buildingWidth / 2,
-  //   o[1] - (10 * scaleWeight)]
-  // );
+  symmetricWindowSeries(
+    getRandomIntInclusive(2, 5), // quantity
+    panelStyles[window], //   windowType = panelPane
+    getRandomIntInclusive(32, 48), //   windowWidth
+    margin + buildingWidth / 2, //   x
+    y + 10 /* - (10 * scaleWeight) */ //   y
+  );
 
   // center line
   stroke(0, 124, 69);
@@ -86,7 +87,6 @@ function basicStory(w = buildingWidth, h = storyHeight, x, y, scaleWeight) {
   let c = color(255, 255, 255);
   fill(c);
   stroke(0, 0, 0);
-  // baseBlock;
 }
 
 function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight) {
@@ -95,12 +95,10 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
 
   const levelBottom = y + h;
   const levelTop = y;
-  const railTop = y - h / 3;
   const railStart = x + w / 4;
   const railEnd = w + x - w / 4;
 
   // Platform
-
   rect(x - 2, levelBottom - h / 3, w + 4, 2);
   const numberOfSupports = 18;
   for (let i = 0; i <= numberOfSupports; i += 1) {
@@ -115,7 +113,7 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
   /* // Rails */
   const railSupports = 9;
   for (let i = 1; i <= railSupports; i += 1) {
-    const rise = levelBottom + 15 - ((h + 15) / railSupports) * i;
+    const rise = levelBottom + 15 - ((h + 14) / railSupports) * i;
     const run = railStart + ((railEnd - railStart) / railSupports * i);
 
     line(run, rise, run, rise - h / 3)
@@ -124,21 +122,22 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
 
   stroke(255, 0, 0);
   line(railStart, levelBottom, railEnd - 10, levelTop)
-
+  
   stroke(0, 124, 124);
   line(railStart + 10, levelBottom, railEnd, levelTop)
-
-  // stroke(0, 0, 0);
-
-  // line(railStart, y - 22, railEnd, h - 22)
+  
+  stroke(150, 0, 150);
+  line(railStart, levelBottom - 15  - h / 14, railEnd, levelTop - h/3)
+  line(railStart, levelBottom - 19  - h / 14, railEnd, levelTop - h/3 - 4)
 
   // /* // Circles at the end of rails */
-  // fill(255, 255, 255);
-  // circle(railStart, y - 20, 5)
-  // noFill();
-  // circle(railStart, y - 20, 9)
-  // fill(255, 255, 255);
-  // circle(railEnd, h - 18, 9)
-  // circle(railEnd, h - 18, 5)
-
+  fill(255, 255, 255);
+  circle(railStart, levelBottom - 22, 9)
+  circle(railStart, levelBottom - 22, 5)
+  
+  circle(railEnd, levelTop - 38, 9)
+  circle(railEnd, levelTop - 38, 5)
+  
+  stroke(0, 0, 0);
+  noFill();
 }
