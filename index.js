@@ -51,10 +51,16 @@ function draw() {
     rect(buildingWidth * 2, lineY + storyHeight, -30, -5);
     /* end reference boxes */
 
+    basicStory(
+      buildingWidth/2,
+      storyHeight,
+      buildingOrigin[0],
+      lineY
+    );
   }
 }
 
-function basicStory(o = buildingOrigin, w=buildingWidth, h=storyHeight, scaleWeight) {
+function basicStory(w=buildingWidth, h=storyHeight, x, y,  scaleWeight) {
   stroke(0, 0, 0);
   noFill();
   const window = getRandomIntInclusive(0, panelStyles.length);
@@ -62,14 +68,8 @@ function basicStory(o = buildingOrigin, w=buildingWidth, h=storyHeight, scaleWei
   // things should be symmetric
   // they can also be multiply-defined
 
-  for (let i = 0; i < 2; i += 1) {
-    fireEscapeLayer(
-      w,
-      h,
-      o[0],
-      o[1]
-    );
-  }
+  
+  fireEscapeLayer( w, h, x, y );
   // rotate(-60);
   // symmetricWindowSeries(
   //   getRandomIntInclusive(1, 3),
@@ -81,57 +81,60 @@ function basicStory(o = buildingOrigin, w=buildingWidth, h=storyHeight, scaleWei
   // );
 
   // center line
-  line(margin + buildingWidth / 2, o[1], margin + buildingWidth / 2, storyHeight);
+  stroke(0, 124, 69);
+  // line(margin + buildingWidth / 2, y, margin + buildingWidth / 2, storyHeight);
   let c = color(255, 255, 255);
   fill(c);
   stroke(0, 0, 0);
   // baseBlock;
 }
 
-function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, bottomOfStory = storyHeight) {
+function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight) {
   stroke(0, 0, 0);
   noFill();
+  const levelBottom = y+h;
   const railStart = x + w / 5;
   const railEnd = w + x - w / 5;
-  line(railStart, bottomOfStory, railEnd, h)
-
-  stroke(0, 124, 124);
-  line(railStart + 10, bottomOfStory, railEnd, h + 10)
-
-  stroke(0, 124, 0);
-  line(railStart, bottomOfStory - 15, railEnd, h - 15) // center line
-  stroke(0, 0, 0);
-
-  line(railStart, bottomOfStory - 22, railEnd, h - 22)
-
-  fill(255, 255, 255);
-  circle(railStart, bottomOfStory - 20, 5)
-  noFill();
-  circle(railStart, bottomOfStory - 20, 9)
-  fill(255, 255, 255);
-  circle(railEnd, h - 18, 9)
-  circle(railEnd, h - 18, 5)
-  noFill();
-
-  rect(x, bottomOfStory - h / 3, w, h / 3);
-
-  const railSupports = 9;
-  for (let i = 1; i <= railSupports; i += 1) {
-    const rise = (x) => bottomOfStory + 15 - ((h + 56) / railSupports) * x;
-    const run = railStart + ((railEnd - railStart) / railSupports * i);
-    line(run, rise(i), run, rise(i) - h / 3)
-    rect(run - 7, rise(i) - 12, 7, 3);
-  }
-
+  
+  // Platform
+  
+  rect(x-2, levelBottom - h/3, w +4, 2);
   const numberOfSupports = 18;
-  for (let i = 0; i < numberOfSupports; i += 1) {
-    line(x + (w / numberOfSupports * i), bottomOfStory, x + (w / numberOfSupports * i), bottomOfStory - h / 3)
+  for (let i = 0; i <= numberOfSupports; i += 1) {
+    line(x + (w / numberOfSupports * i), levelBottom, x + (w / numberOfSupports * i), levelBottom - h / 3)
   }
 
   // bottom level
-  rect(x, bottomOfStory, w, 5);
-  rect(x, bottomOfStory + 2, w, 5);
+  rect(x, levelBottom-5, w, 5);
+  rect(x, levelBottom -7, w, 5);
 
-  stroke(128, 0, 0);
-  rect(x, bottomOfStory, buildingWidth, storyHeight);
+  
+  /* // Rails */
+  // const railSupports = 9;
+  // for (let i = 1; i <= railSupports; i += 1) {
+  //   const rise = (x) => y + 15 - ((h + 56) / railSupports) * x;
+  //   const run = railStart + ((railEnd - railStart) / railSupports * i);
+  //   // line(run, rise(i), run, rise(i) - h / 3)
+  //   // rect(run - 7, rise(i) - 12, 7, 3);
+  // }
+  // line(railStart, y, railEnd, h)
+
+  // stroke(0, 124, 124);
+  // line(railStart + 10, y, railEnd, h + 10)
+
+  // stroke(0, 124, 0);
+  // line(railStart, y - 15, railEnd, h - 15) // center line
+  // stroke(0, 0, 0);
+
+  // line(railStart, y - 22, railEnd, h - 22)
+
+  // /* // Circles at the end of rails */
+  // fill(255, 255, 255);
+  // circle(railStart, y - 20, 5)
+  // noFill();
+  // circle(railStart, y - 20, 9)
+  // fill(255, 255, 255);
+  // circle(railEnd, h - 18, 9)
+  // circle(railEnd, h - 18, 5)
+  
 }
