@@ -1,38 +1,137 @@
 
+let img; // Declare variable 'img'.
+
 function genVerticalWindowWidths() {
   return getRandomIntInclusive(buildingWidth / 8, buildingWidth / 3);
 }
 
+
+
+function airConditioner(x = buildingWidth / 2, y = storyHeight, windowWidth) {
+  const w = lowerBoundWindowWidth;
+  const xCorrect = windowWidth - w / 2 + x;
+  const baseHeight = w * 0.618;
+  const yCorrect = y - baseHeight;
+  // stroke(0, 0, 0); TODO: put back
+  fill(255, 255, 255);
+  // an a/c is always the same width.x
+  rect(xCorrect, yCorrect, w, baseHeight);
+  rect(xCorrect + 3, yCorrect + 3, w - 6, (baseHeight) - 6);
+
+  rect(xCorrect + 3, yCorrect + 5, w - 6, (baseHeight) - 10);
+  rect(xCorrect + 3, yCorrect + 7, w - 6, (baseHeight) - 14);
+  rect(xCorrect + 3, yCorrect + 9, w - 6, (baseHeight) - 18);
+
+  rect(xCorrect + (w / 2) - 4, yCorrect + (baseHeight) - 2, 8, (baseHeight) - 24);
+  stroke(0, 0, 0);
+  noFill();
+}
+
 function symmetricWindowSeries(
-  quantity,
+  q,
   windowType = panelPane,
   windowWidth,
   x,
   y
 ) {
-  // const panelsInWindows = 3;
-  const panelsInWindows = getRandomIntInclusive(1, 3);
+  const quantity = 12;
+  let internalX = x;
+
+  const ac = getRandomIntInclusive(0, quantity);
+  let acCount = 0;
+  const conditionerPosition = goldenRatio(windowWidth).c;
+
+  // const panelsInWindows = getRandomIntInclusive(1, 3);
+  const panelsInWindows = 1;
   const pairs = (!isEven(quantity)) ?
     (quantity - 1) / 2 :
     quantity / 2;
 
   if (!isEven(quantity)) {
-    verticalPaneDef(panelsInWindows, windowType, x, y, windowWidth);
-  }
-  for (let i = 0; i < pairs; i += 1) {
-    const originDistance = (buildingWidth / quantity);
-    const x1 = x + originDistance * (i + 1);
-    const x2 = x - originDistance * (i + 1);
-    verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth);
-    verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth);
+    verticalPaneDef(panelsInWindows, windowType, internalX, y, windowWidth);
+
+    const randoConditioner = getRandomIntInclusive(0, 1);
+    if (ac > 0 && acCount < ac && randoConditioner > 0) {
+      stroke(0, 0, 124);
+      airConditioner(internalX - windowWidth, internalX + conditionerPosition, windowWidth);
+      acCount += 1;
+    }
+
+    for (let i = 0; i < pairs; i += 1) {
+      const originDistance = (buildingWidth / quantity);
+
+      const x1 = x + (originDistance * (i + 1));
+      const x2 = x - originDistance * (i + 1);
+
+      verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth);
+      verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth);
+
+      const randoConditioner = getRandomIntInclusive(0, 1);
+      const windowX = randoConditioner === 0 ? x1 : x2;
+
+      if (ac > 0 && acCount < ac) {
+        stroke(0, 0, 124);
+        airConditioner(windowX - windowWidth, y + conditionerPosition, windowWidth);
+        acCount += 1;
+      }
+      stroke(0, 0, 0);
+    }
+  } else {
+    for (let i = 0; i < pairs; i += 1) {
+      // in non-centered symmetric pairs, elements should
+      // elements should space themselves evenly across the width of the building
+      const centerLine = margin + buildingWidth/2;
+      
+      const interval = buildingWidth/quantity;
+      console.log(interval);
+      console.log(windowWidth);
+      console.log(interval - windowWidth / 2);
+      
+      /* internal 2-panel, external pair */
+      // const x1 = centerLine + (interval/2 * i+1) + windowWidth/2; 
+      // const x2 = centerLine - (interval/2 * i+1) - windowWidth/2;
+
+      /* two-and-two */
+      // const x1 = centerLine + (interval/2 * i+1) + windowWidth; 
+      // const x2 = centerLine - (interval/2 * i+1) - windowWidth;
+      
+      const x1 = centerLine - (interval*i) + ((interval - windowWidth)/2); 
+      const x2 = centerLine - (interval*i) + ((interval - windowWidth)/2);
+      
+      const centerPane = ((interval - windowWidth)/2);
+      /* DEBUGGING */
+      stroke(255, 128, 0);
+      rect(centerLine, y, 1, 100); // debug line
+      
+      stroke(255, 128, 128);
+      rect(centerLine - buildingWidth/2 + (interval*i+1), y, interval, 40); // window mock outline
+      stroke(128, 255, 255);
+      rect(centerLine + (interval*i+1), y, interval, 40); // window mock outline
+      // rect(centerLine - (interval*i), y, interval, 40); // window mock outline
+      stroke(128, 255, 0);
+      rect(centerLine - (interval*i) + centerPane, y, windowWidth, 40); // window mock outline
+      stroke(0, 0, 0);
+      /* END DEBUGGING */
+
+      verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth);
+      verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth);
+
+      const randoConditioner = getRandomIntInclusive(0, 1);
+      const windowX = randoConditioner === 0 ? x1 : x2;
+
+      if (ac > 0 && acCount < ac) {
+        stroke(0, 0, 124);
+        airConditioner(windowX - windowWidth, y + conditionerPosition, windowWidth);
+        acCount += 1;
+      }
+      stroke(0, 0, 0);
+    }
   }
 }
-
 function verticalPaneDef(number, element, ...etc) {
   /* width is defined per window panel in the group */
   /* currently, this defines all windows in a symmetric set as being the same width */
 
-  console.log('check etc', etc)
   const x = etc[0];
   const y = etc[1];
   const w = etc[2];
@@ -40,21 +139,21 @@ function verticalPaneDef(number, element, ...etc) {
   if (isEven(number)) {
     // if we have an even number of panels, 
     // panels should emerge left and right around the center of X
-    for (let i = 0; i < number; i += 1) {
-      if (!isEven(i)) {
-        element(w, x - ((w * i) - w), y);
-        console.log('check x1', x, w, w * i, i)
-      } else {
-        element(w, x + ((w * i) - w), y);
-        console.log('check x2', x, w, w * i, i)
-      }
-    }
+    // for (let i = 0; i < number; i += 1) {
+    //   if (!isEven(i)) {
+    //     element(w, x - ((w * i) - w), y);
+    //   } else {
+    //     element(w, x + ((w * i) - w), y);
+    //   }
+    // }
   } else {
     // else the first panel should be centered
     // and subsequent panels should be to the left and right of the first one
     for (let i = 1; i <= number; i += 1) {
       if (i == 1) { // center first element of an odd series
+        console.log('x in panedef', x);
         element(w, x - (w / 2), y);
+        // nb here
       } else if (isEven(i)) { // alternate left and right even/odd remainder
         element(w, x - (w + w / 2), y);
       } else {
@@ -94,7 +193,9 @@ function panelPane(w, x = 10, y = 10, cols = 3, rows = 3) {
   // return information about pane?
   return {
     topL: [pane[0][0].outer.x, pane[0][0].outer.y],
-    bottomR: [pane[2][2].outer.x, pane[2][2].outer.y]
+    bottomR: [pane[2][2].outer.x, pane[2][2].outer.y],
+    h: h1,
+    w: w1,
   }
 }
 
@@ -113,9 +214,9 @@ function squarePaneWindow(w, x = 10, y = 10) {
   const { outer: l_outer, inner: l_inner } = lower;
 
   rect(outer.x, outer.y, outer.w, outer.h); //outer 
-  rect(inner.x, inner.y, inner.w, inner.h); //outer 
+  rect(inner.x, inner.y, inner.w, inner.h); // inner
   rect(l_outer.x, l_outer.y, l_outer.w, l_outer.h); //outer 
-  rect(l_inner.x, l_inner.y, l_inner.w, l_inner.h); //outer 
+  rect(l_inner.x, l_inner.y, l_inner.w, l_inner.h); // inner
 }
 
 function onePaneWindow(w, x, y) {

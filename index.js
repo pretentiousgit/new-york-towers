@@ -14,17 +14,21 @@ const storyHeight = canvas[1] / stories;
 const margin = (canvas[0] - buildingWidth) / 2; // center the building
 
 const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
+
+const lowerBoundWindowWidth = 32;
 // const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
-const panelStyles = [panelPane, onePaneWindow, squarePaneWindow];
+const panelStyles = [panelPane, onePaneWindow];
 
 function setup() {
   createCanvas(...canvas);   // createCanvas must be the first statement
 
   stroke(0); // Set line drawing color to white
+  
+  img = loadImage('images/airConditioner2.svg'); // Load the image
 
   frameRate(2);
-  // noLoop();
+  noLoop();
   // TODO: Implement a pause button in the drawing function
 }
 
@@ -36,8 +40,15 @@ function draw() {
   // rect(0, 0, canvas[0],canvas[1]);
   // noFill();
 
+  /* Test rectangle for building size onscreen */
+  fill(0, 124, 124);
+  rect(margin, 0, buildingWidth, canvas[1]);
+  // noFill();
+
   const fireW = getRandomIntInclusive(buildingWidth/3.1415, buildingWidth/1.618);
-  const fireX = getRandomIntInclusive(buildingWidth/3.1415, buildingWidth + fireW);
+  const fireX = getRandomIntInclusive(margin, buildingWidth);
+
+  const windowStyle = panelStyles[getRandomIntInclusive(0, panelStyles.length - 1)];
 
   for (let i = 0; i < stories; i += 1) {
     const marginLeft = margin;
@@ -59,24 +70,24 @@ function draw() {
       storyHeight,
       buildingOrigin[0],
       lineY,
-      fireX
+      fireX,
+      windowStyle
     );
   }
 }
 
-function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, scaleWeight) {
+function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowStyle, scaleWeight) {
   stroke(0, 0, 0);
   noFill();
-  const window = getRandomIntInclusive(0, panelStyles.length - 1);
 
   // things should be symmetric
   // they can also be multiply-defined
   fireEscapeLayer(fireW, h, fireX, y);
 
   symmetricWindowSeries(
-    getRandomIntInclusive(2, 5), // quantity
-    panelStyles[window], //   windowType = panelPane
-    getRandomIntInclusive(32, 48), //   windowWidth
+    4, // quantity
+    windowStyle, //   windowType = panelPane
+    getRandomIntInclusive(lowerBoundWindowWidth, 48), //   windowWidth
     margin + buildingWidth / 2, //   x
     y + 10 /* - (10 * scaleWeight) */ //   y
   );
