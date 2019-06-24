@@ -34,7 +34,7 @@ function symmetricWindowSeries(
   x,
   y
 ) {
-  const quantity = 12;
+  const quantity = 6;
   let internalX = x;
 
   const ac = getRandomIntInclusive(0, quantity);
@@ -95,10 +95,11 @@ function symmetricWindowSeries(
       // const x1 = centerLine + (interval/2 * i+1) + windowWidth; 
       // const x2 = centerLine - (interval/2 * i+1) - windowWidth;
       
+      const centerPane = ((interval - windowWidth)/2);
       const x1 = centerLine - (interval*i) + ((interval - windowWidth)/2); 
       const x2 = centerLine - (interval*i) + ((interval - windowWidth)/2);
-      
-      const centerPane = ((interval - windowWidth)/2);
+      const xL = centerLine - buildingWidth/2 + (interval*i+1);
+      const xR = centerLine + (interval*i) + centerPane;
       /* DEBUGGING */
       stroke(255, 128, 0);
       rect(centerLine, y, 1, 100); // debug line
@@ -109,7 +110,10 @@ function symmetricWindowSeries(
       rect(centerLine + (interval*i+1), y, interval, 40); // window mock outline
       // rect(centerLine - (interval*i), y, interval, 40); // window mock outline
       stroke(128, 255, 0);
-      rect(centerLine - (interval*i) + centerPane, y, windowWidth, 40); // window mock outline
+      rect(xL + ((interval - windowWidth)/2), y, windowWidth, 40); // window mock outline
+      
+      stroke(255, 255, 0);
+      rect(xR, y, windowWidth, 40); // window mock outline
       stroke(0, 0, 0);
       /* END DEBUGGING */
 
