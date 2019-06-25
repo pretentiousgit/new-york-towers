@@ -1,16 +1,14 @@
 const DEBUG = false;
 let y = 100; // animated line
 
-const canvas = [960, 940]
+const canvas = [3200, 940]
 const stories = 8;
-
-const buildingWidth = canvas[0] / 2;
+const buildingWidth = 470;
 const storyHeight = canvas[1] / stories;
-const margin = (canvas[0] - buildingWidth) / 2; // center the building
-
-const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
-
+const margin = 10; // center the building
 const lowerBoundWindowWidth = 32;
+
+const numberOfBuildings = Math.round(canvas[0]/buildingWidth);
 // const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
 const panelStyles = [panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow];
@@ -48,40 +46,45 @@ function draw() {
   const fireX = getRandomIntInclusive(margin, buildingWidth);
 
   const windowStyle = panelStyles[getRandomIntInclusive(0, panelStyles.length - 1)];
-
-  for (let i = 0; i < stories; i += 1) {
-    const marginLeft = margin;
-    const marginTop = y * i;
-
-    // nb: this is weird, those numbers should be the same. implies a story is drawing off-screen
-    const height = (i == 7) ? storyHeight * 1.5 : storyHeight;
-    const windows = (i == 6) ? undefined : windowStyle;
-    const numberOfWindows = getRandomIntInclusive(2, 5);
-    const lineY = height * i;
-
-    if (DEBUG) {
-      /* reference boxes 1 */
-      fill(0, 0, 0);
-      line(0, lineY, buildingWidth * 2, lineY);
-      rect(0, lineY, 30, 5);
-
-      fill(128, 0, 0);
-      rect(buildingWidth * 2, lineY + height, -30, -5);
-      /* end reference boxes */
-    }
-
-    basicStory(
-      fireW,
-      height,
-      buildingOrigin[0],
-      lineY,
-      fireX,
-      windows,
-      numberOfWindows,
-      i
-    );
+  console.log('check number of buildings', numberOfBuildings);
+  for(let i = 0; i < numberOfBuildings; i +=1) {
+    const buildingOrigin = [margin+(margin + buildingWidth)*i, canvas[1] - (storyHeight - 20)];
+    fill(127*i, 125, 48);
+    rect(...buildingOrigin, 470, 960);
   }
-  saveAs();
+  // for (let i = 0; i < stories; i += 1) {
+  //   const marginLeft = margin;
+  //   const marginTop = y * i;
+
+  //   // nb: this is weird, those numbers should be the same. implies a story is drawing off-screen
+  //   const height = (i == 7) ? storyHeight * 1.5 : storyHeight;
+  //   const windows = (i == 6) ? undefined : windowStyle;
+  //   const numberOfWindows = getRandomIntInclusive(2, 5);
+  //   const lineY = height * i;
+
+  //   if (DEBUG) {
+  //     /* reference boxes 1 */
+  //     fill(0, 0, 0);
+  //     line(0, lineY, buildingWidth * 2, lineY);
+  //     rect(0, lineY, 30, 5);
+
+  //     fill(128, 0, 0);
+  //     rect(buildingWidth * 2, lineY + height, -30, -5);
+  //     /* end reference boxes */
+  //   }
+
+  //   basicStory(
+  //     fireW,
+  //     height,
+  //     buildingOrigin[0],
+  //     lineY,
+  //     fireX,
+  //     windows,
+  //     numberOfWindows,
+  //     i
+  //   );
+  // }
+  // saveAs();
   // stroke(0, 0, 0);
   // for (x = 0; x < 10; x++) {
   //   for (y = 0; y < 10; y++) {
