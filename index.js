@@ -21,92 +21,52 @@ function setup() {
 
   img = loadImage('images/airConditioner2.svg'); // Load the image
 
-  frameRate(2);
-  noLoop();
+  frameRate(1);
+  // noLoop();
   // TODO: Implement a pause button in the drawing function
 }
 
 function draw() {
   background(255); // Set the background to black
+  noFill();
 
-  if (DEBUG) {
-    /* Test rectangle for full canvas size onscreen */
-    fill(0, 124, 124);
-    rect(0, 0, canvas[0], canvas[1]);
-    noFill();
-  }
-
-  if (DEBUG) {
-    /* Test rectangle for building size onscreen */
-    fill(255, 255, 255);
-  }
   rect(margin, 0, buildingWidth, canvas[1]);
 
-
-
-  console.log('check number of buildings', numberOfBuildings);
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < numberOfBuildings; i += 1) {
     const buildingOrigin = [margin + ((margin + buildingWidth) * i), canvas[1] - (storyHeight - 20)];
-    fill(127 * i, 125, 48);
     rect(buildingOrigin[0], 0, 470, 960);
 
     const windowStyle = panelStyles[getRandomIntInclusive(0, panelStyles.length - 1)];
     const fireW = getRandomIntInclusive(buildingWidth / 3.1415, buildingWidth / 1.618);
     const fireX = getRandomIntInclusive(buildingOrigin[0], buildingOrigin[0] + (buildingWidth - fireW));
-
+    const fireEscapes = getRandomIntInclusive(0, 2);
+    const mirrored = getBool();
+    const curvy = getBool();
 
     for (let i = 0; i < stories; i += 1) {
       const height = (i == 7) ? storyHeight * 1.5 : storyHeight;
-      const windows = (i == 6) ? undefined : windowStyle;
+      const windows = (i == 7) ? undefined : windowStyle;
       const numberOfWindows = getRandomIntInclusive(2, 5);
       const lineY = height * i;
-      
-      fireEscapeLayer(fireW, height, fireX, lineY, i);
-      console.log(i);
+
+      if (fireEscapes == 1) {
+        fireEscapeLayer(fireW, height, fireX, lineY, i, curvy, mirrored);
+      }
+
+      if (fireEscapes == 2) {
+        const w = fireW / 1.5;
+        fireEscapeLayer(w, height, buildingOrigin[0] + 10, lineY, i, curvy, false);
+        fireEscapeLayer(w, height, buildingOrigin[0] + (buildingWidth - w), lineY, i, curvy, true);
+      }
+
       basicStory(
-        fireW,
-        height,
         buildingOrigin[0],
         lineY,
-        fireX,
         windows,
-        numberOfWindows,
-        i
+        numberOfWindows
       );
     }
   }
-  // for (let i = 0; i < stories; i += 1) {
-  //   const marginLeft = margin;
-  //   const marginTop = y * i;
-
-  //   // nb: this is weird, those numbers should be the same. implies a story is drawing off-screen
-  //   const height = (i == 7) ? storyHeight * 1.5 : storyHeight;
-  //   const windows = (i == 6) ? undefined : windowStyle;
-  //   const numberOfWindows = getRandomIntInclusive(2, 5);
-  //   const lineY = height * i;
-
-  //   if (DEBUG) {
-  //     /* reference boxes 1 */
-  //     fill(0, 0, 0);
-  //     line(0, lineY, buildingWidth * 2, lineY);
-  //     rect(0, lineY, 30, 5);
-
-  //     fill(128, 0, 0);
-  //     rect(buildingWidth * 2, lineY + height, -30, -5);
-  //     /* end reference boxes */
-  //   }
-
-  //   basicStory(
-  //     fireW,
-  //     height,
-  //     buildingOrigin[0],
-  //     lineY,
-  //     fireX,
-  //     windows,
-  //     numberOfWindows,
-  //     i
-  //   );
-  // }
   // saveAs();
   // stroke(0, 0, 0);
   // for (x = 0; x < 10; x++) {
@@ -118,8 +78,7 @@ function draw() {
   // print("saved svg");
 }
 
-function basicStory(fireW = buildingWidth, h = storyHeight, buildingX, y, fireX, windowStyle, numberOfWindows, index, scaleWeight) {
-  console.log('basicStoryX', buildingX);
+function basicStory(buildingX, y, windowStyle, numberOfWindows) {
   stroke(0, 0, 0);
   noFill();
 
@@ -134,6 +93,7 @@ function basicStory(fireW = buildingWidth, h = storyHeight, buildingX, y, fireX,
       getRandomIntInclusive(lowerBoundWindowWidth, 64), //   windowWidth
       buildingX, //   x
       y + 10, /* - (10 * scaleWeight) */ //   y
+      buildingX
     );
   }
 
@@ -147,7 +107,7 @@ function basicStory(fireW = buildingWidth, h = storyHeight, buildingX, y, fireX,
   }
 }
 
-function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, index) {
+function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, index, isItCurvy, isItMirrored) {
   stroke(0, 0, 0);
   noFill();
 
@@ -160,9 +120,12 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
 
   const levelBottom = y + h;
   const levelTop = y;
-  const railStart = fireEscapeX + w / 4;
-  const railEnd = w + fireEscapeX - w / 4;
-  
+
+  const rs1 = fireEscapeX + w / 4;
+  const rs2 = w + fireEscapeX - w / 4;
+  const railStart = (isItMirrored) ? rs1 : rs2;
+  const railEnd =(isItMirrored) ? rs2 : rs1;
+
   // Platform
 
   // bottom level
@@ -176,7 +139,6 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
   rect(fireEscapeX - 2, levelBottom - h / 3, w + 4, 2);
 
   const numberOfSupports = 18;
-  const isItCurvy = Boolean(getRandomIntInclusive(0, 1) == 0);
   for (let i = 0; i <= numberOfSupports; i += 1) {
     line(fireEscapeX + (w / numberOfSupports * i), levelBottom, fireEscapeX + (w / numberOfSupports * i), levelBottom - h / 3)
 
@@ -230,13 +192,13 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
     rect(run - 7, rise - 12, 7, 3);
   }
 
-  stroke(255, 0, 0);
+  // stroke(255, 0, 0);
   line(railStart, levelBottom, railEnd - 10, levelTop)
 
-  stroke(0, 124, 124);
+  // stroke(0, 124, 124);
   line(railStart + 10, levelBottom, railEnd, levelTop)
 
-  stroke(150, 0, 150);
+  // stroke(150, 0, 150);
   line(railStart, levelBottom - 15 - h / 14, railEnd, levelTop - h / 3)
   line(railStart, levelBottom - 19 - h / 14, railEnd, levelTop - h / 3 - 4)
 

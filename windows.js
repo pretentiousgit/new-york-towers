@@ -9,11 +9,15 @@ function genVerticalWindowWidths() {
 
 
 function airConditioner(x, y, windowHeight) {
-  // probably air conditioners need to calculate their own position
-  // based on the height of the window they find themselves in;
+
+    // air conditioners should draw themselves around a midpoint
+    // air conditioners need a height not a width.
+    // basically a window's height, width, and panelling 
+    // plus whether it has an ac or not
+    // needs to be internal to that window.
 
   const w = lowerBoundWindowWidth;
-  const xCorrect = x - lowerBoundWindowWidth/2;
+  const xCorrect = x - lowerBoundWindowWidth / 2;
   const baseHeight = w * 0.618;
   const yCorrect = getBool() ? windowHeight + y - baseHeight : y;
 
@@ -38,14 +42,14 @@ function symmetricWindowSeries(
   windowType = panelPane,
   windowWidth,
   x,
-  y
+  y, 
+  buildingOrigin
 ) {
   // const quantity = 5;
   let internalX = x;
   const ac = getRandomIntInclusive(0, quantity);
   acCount = 0;
 
-  console.log('windowType', windowType.name);
 
   // const panelsInWindows = getRandomIntInclusive(1, 3);
   const panelsInWindows = 1;
@@ -54,40 +58,28 @@ function symmetricWindowSeries(
     quantity / 2;
 
   if (!isEven(quantity)) {
-    const centerLine = x + buildingWidth/2;
-    //   const interval = buildingWidth/quantity;
-    //   const centerPane = ((interval - windowWidth)/2);
+    const centerLine = x + buildingWidth / 2;
 
-    //   const arrangementOptions = [
-    //     {
-    //       name: 'symmetric',
-    //       x1: (centerLine - buildingWidth/2 + (interval*i+1)) + ((interval - windowWidth)/2),
-    //       x2: (centerLine + (interval*i) + centerPane)
-    //     }
-    //   ];
-
-    internalX = centerLine - windowWidth / 2;
-    verticalPaneDef(panelsInWindows, windowType, internalX, y, windowWidth, ac);
-
+    centeredX = (x + buildingWidth/2) - windowWidth/2;
+    verticalPaneDef(panelsInWindows, windowType, centeredX, y, windowWidth, ac);
 
     for (let i = 0; i < pairs; i += 1) {
-      const originDistance = (buildingWidth / quantity);
+      const interval = buildingWidth / quantity;
 
-      const xL = x - windowWidth / 2 - originDistance * (i + 1);
-      const xR = x + (originDistance * (i + 1) - windowWidth / 2);
+      const x1 = (centerLine - buildingWidth / 2 + (interval * i + 1)) + ((interval - windowWidth) / 2);
+      const x2 = (centerLine + (interval * i) + (interval - (windowWidth/2)));
+      const xL = x1;
+      const xR = x2;
 
       verticalPaneDef(panelsInWindows, windowType, xL, y, windowWidth, ac);
       verticalPaneDef(panelsInWindows, windowType, xR, y, windowWidth, ac);
-
-      const randoConditioner = getRandomIntInclusive(0, 1);
-      const windowX = randoConditioner === 0 ? xR : xL;
-
     }
   } else {
+    /* DEBUG: Symmetric pairs are working fine! */
     for (let i = 0; i < pairs; i += 1) {
       // in non-centered symmetric pairs, elements should
       // elements should space themselves evenly across the width of the building
-      const centerLine = x + buildingWidth/2;
+      const centerLine = x + buildingWidth / 2;
       const interval = buildingWidth / quantity;
       const centerPane = ((interval - windowWidth) / 2);
 
@@ -98,26 +90,6 @@ function symmetricWindowSeries(
           x2: (centerLine + (interval * i) + centerPane)
         }
       ]
-
-      if (DEBUG) {
-        // /* DEBUGGING */
-        stroke(255, 128, 0);
-        rect(centerLine, y, 1, 100); // debug line
-
-        stroke(255, 128, 128);
-        rect(xL, y, interval, 40); // window mock outline
-        rect(xL + interval / 2, y, 1, 100); // debug line
-        stroke(128, 255, 255);
-        rect(xR, y, interval, 40); // window mock outline
-
-        stroke(128, 255, 0);
-        rect(xL + ((interval - windowWidth) / 2), y, windowWidth, 40); // window mock outline
-
-        stroke(255, 255, 0);
-        rect(xR, y, windowWidth, 40); // window mock outline
-        stroke(0, 0, 0);
-        /* END DEBUGGING */
-      }
 
       const arO = arrangementOptions;
       const { x1, x2 } = arO[getRandomIntInclusive(0, arO.length - 1)];
@@ -140,14 +112,7 @@ function verticalPaneDef(number, element, ...etc) {
     Boolean(ac > 0 && acCount < ac) :
     false;
 
-  if (isThereAC) {
-    // air conditioners should draw themselves around a midpoint
-    // air conditioners need a height not a width.
-    // basically a window's height, width, and panelling 
-    // plus whether it has an ac or not
-    // needs to be internal to that window.
-    acCount += 1;
-  }
+  if (isThereAC) { acCount += 1; }
 
   // this is whether we have even or odd panel numbers in one window
   // not whether we have even or odd panels at all.
@@ -211,7 +176,7 @@ function panelPane(w, x = 10, y = 10, ac = Boolean(false), cols = 3, rows = 3) {
   }
 
   if (ac) {
-    airConditioner(x2 + (w2/2), y2, h2);
+    airConditioner(x2 + (w2 / 2), y2, h2);
   }
 
   // return information about pane?
@@ -230,7 +195,7 @@ function twoPane(fn, w, x, y) {
 }
 
 function squarePaneWindow(w, x = 10, y = 10, ac = Boolean(false)) {
-  
+
   const width = ((w * 2) >= storyHeight - 10) ? 48 : w;
   const numbers = framedPanel(width, x, y, width * 2);
 
@@ -238,9 +203,9 @@ function squarePaneWindow(w, x = 10, y = 10, ac = Boolean(false)) {
   rect(outer.x, outer.y, outer.w, outer.h); //outer 
   rect(inner.x, inner.y, inner.w, inner.h); //outer 
   rect(inner.x, inner.y + inner.h / 2, inner.w, 2)
-  
+
   if (ac) {
-    airConditioner(inner.x + (inner.w/2), inner.y, inner.h);
+    airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
 }
 
