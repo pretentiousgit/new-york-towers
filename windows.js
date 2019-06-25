@@ -66,7 +66,7 @@ function symmetricWindowSeries(
     const randoConditioner = getRandomIntInclusive(0, 1);
     if (ac > 0 && acCount < ac && randoConditioner > 0) {
       stroke(96, 0, 124);
-      airConditioner(internalX, conditionerPosition, windowWidth);
+      airConditioner(internalX - windowWidth/2,  y + conditionerPosition, windowWidth);
       acCount += 1;
     }
 
