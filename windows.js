@@ -34,7 +34,7 @@ function symmetricWindowSeries(
   x,
   y
 ) {
-  const quantity = 6;
+  const quantity = 5;
   let internalX = x;
 
   const ac = getRandomIntInclusive(0, quantity);
@@ -48,12 +48,25 @@ function symmetricWindowSeries(
     quantity / 2;
 
   if (!isEven(quantity)) {
+    const centerLine = margin + buildingWidth/2;
+    //   const interval = buildingWidth/quantity;
+    //   const centerPane = ((interval - windowWidth)/2);
+      
+    //   const arrangementOptions = [
+    //     {
+    //       name: 'symmetric',
+    //       x1: (centerLine - buildingWidth/2 + (interval*i+1)) + ((interval - windowWidth)/2),
+    //       x2: (centerLine + (interval*i) + centerPane)
+    //     }
+    //   ];
+    
+    internalX = centerLine - windowWidth/2;
     verticalPaneDef(panelsInWindows, windowType, internalX, y, windowWidth);
 
     const randoConditioner = getRandomIntInclusive(0, 1);
     if (ac > 0 && acCount < ac && randoConditioner > 0) {
-      stroke(0, 0, 124);
-      airConditioner(internalX - windowWidth, internalX + conditionerPosition, windowWidth);
+      stroke(96, 0, 124);
+      airConditioner(internalX, conditionerPosition, windowWidth);
       acCount += 1;
     }
 
@@ -71,7 +84,7 @@ function symmetricWindowSeries(
 
       if (ac > 0 && acCount < ac) {
         stroke(0, 0, 124);
-        airConditioner(windowX - windowWidth, y + conditionerPosition, windowWidth);
+        airConditioner(windowX - windowWidth/2, y + conditionerPosition, windowWidth);
         acCount += 1;
       }
       stroke(0, 0, 0);
