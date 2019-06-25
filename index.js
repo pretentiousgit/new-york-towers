@@ -202,7 +202,7 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
   // Ladder
   let ladderX = (getRandomIntInclusive(0, 1) == 0) ? platX : platX + platW - 12;
   let ladderY = levelBottom - 15;
-  let ladderExtend = getRandomIntInclusive(-35, 30);
+  let ladderExtend = getRandomIntInclusive(-65, 30);
 
   if (index == 6) {
     /* Rails */
