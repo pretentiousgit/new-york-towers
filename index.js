@@ -76,18 +76,19 @@ function draw() {
       lineY,
       fireX,
       windows,
-      numberOfWindows
+      numberOfWindows,
+      i
     );
   }
 }
 
-function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowStyle, numberOfWindows, scaleWeight) {
+function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowStyle, numberOfWindows, index, scaleWeight) {
   stroke(0, 0, 0);
   noFill();
 
   // things should be symmetric
   // they can also be multiply-defined
-  fireEscapeLayer(fireW, h, fireX, y);
+  fireEscapeLayer(fireW, h, fireX, y, index);
 
   if (windowStyle) {
     symmetricWindowSeries(
@@ -95,7 +96,7 @@ function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowS
       windowStyle, //   windowType = panelPane
       getRandomIntInclusive(lowerBoundWindowWidth, 48), //   windowWidth
       margin + buildingWidth / 2, //   x
-      y + 10 /* - (10 * scaleWeight) */ //   y
+      y + 10, /* - (10 * scaleWeight) */ //   y
     );
   }
 
@@ -107,7 +108,7 @@ function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowS
   stroke(0, 0, 0);
 }
 
-function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight) {
+function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, index) {
   stroke(0, 0, 0);
   noFill();
 
@@ -127,7 +128,20 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
   rect(x, levelBottom - 5, w, 5);
   rect(x, levelBottom - 7, w, 5);
 
+  // Ladder 
+  console.log(index);
+  if (index == 6) {
+    /* Rails */
+    rect(x, levelBottom - 25, 2, 45);
+    rect(x - 2, levelBottom - 15, 1, 65);
+    rect(x + 8, levelBottom - 25, 2, 45);
+    rect(x + 10, levelBottom - 15, 1, 65);
 
+    /* Rungs */
+    for (let i = 0; i <= 8; i += 1) {
+      rect(x, levelBottom + (5*i), 12, 0.5)
+    }
+  }
   /* // Rails */
   const railSupports = 9;
   for (let i = 1; i <= railSupports; i += 1) {
