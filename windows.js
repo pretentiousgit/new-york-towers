@@ -54,7 +54,7 @@ function symmetricWindowSeries(
     quantity / 2;
 
   if (!isEven(quantity)) {
-    const centerLine = margin + buildingWidth / 2;
+    const centerLine = x + buildingWidth/2;
     //   const interval = buildingWidth/quantity;
     //   const centerPane = ((interval - windowWidth)/2);
 
@@ -87,7 +87,7 @@ function symmetricWindowSeries(
     for (let i = 0; i < pairs; i += 1) {
       // in non-centered symmetric pairs, elements should
       // elements should space themselves evenly across the width of the building
-      const centerLine = margin + buildingWidth / 2;
+      const centerLine = x + buildingWidth/2;
       const interval = buildingWidth / quantity;
       const centerPane = ((interval - windowWidth) / 2);
 
