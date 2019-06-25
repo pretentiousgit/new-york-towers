@@ -81,41 +81,36 @@ function symmetricWindowSeries(
       // in non-centered symmetric pairs, elements should
       // elements should space themselves evenly across the width of the building
       const centerLine = margin + buildingWidth/2;
-      
       const interval = buildingWidth/quantity;
-      console.log(interval);
-      console.log(windowWidth);
-      console.log(interval - windowWidth / 2);
-      
-      /* internal 2-panel, external pair */
-      // const x1 = centerLine + (interval/2 * i+1) + windowWidth/2; 
-      // const x2 = centerLine - (interval/2 * i+1) - windowWidth/2;
-
-      /* two-and-two */
-      // const x1 = centerLine + (interval/2 * i+1) + windowWidth; 
-      // const x2 = centerLine - (interval/2 * i+1) - windowWidth;
-      
       const centerPane = ((interval - windowWidth)/2);
-      const x1 = centerLine - (interval*i) + ((interval - windowWidth)/2); 
-      const x2 = centerLine - (interval*i) + ((interval - windowWidth)/2);
-      const xL = centerLine - buildingWidth/2 + (interval*i+1);
-      const xR = centerLine + (interval*i) + centerPane;
-      /* DEBUGGING */
-      stroke(255, 128, 0);
-      rect(centerLine, y, 1, 100); // debug line
       
-      stroke(255, 128, 128);
-      rect(centerLine - buildingWidth/2 + (interval*i+1), y, interval, 40); // window mock outline
-      stroke(128, 255, 255);
-      rect(centerLine + (interval*i+1), y, interval, 40); // window mock outline
-      // rect(centerLine - (interval*i), y, interval, 40); // window mock outline
-      stroke(128, 255, 0);
-      rect(xL + ((interval - windowWidth)/2), y, windowWidth, 40); // window mock outline
+      const arrangementOptions = [
+        {
+          name: 'symmetric',
+          x1: (centerLine - buildingWidth/2 + (interval*i+1)) + ((interval - windowWidth)/2),
+          x2: (centerLine + (interval*i) + centerPane)
+        }
+      ]
+
+      // /* DEBUGGING */
+      // stroke(255, 128, 0);
+      // rect(centerLine, y, 1, 100); // debug line
       
-      stroke(255, 255, 0);
-      rect(xR, y, windowWidth, 40); // window mock outline
-      stroke(0, 0, 0);
+      // stroke(255, 128, 128);
+      // rect(xL, y, interval, 40); // window mock outline
+      // rect(xL + interval/2, y, 1, 100); // debug line
+      // stroke(128, 255, 255);
+      // rect(xR, y, interval, 40); // window mock outline
+
+      // stroke(128, 255, 0);
+      // rect(xL + ((interval - windowWidth)/2), y, windowWidth, 40); // window mock outline
+      
+      // stroke(255, 255, 0);
+      // rect(xR, y, windowWidth, 40); // window mock outline
+      // stroke(0, 0, 0);
       /* END DEBUGGING */
+      const arO = arrangementOptions;
+      const {x1, x2} = arO[getRandomIntInclusive(0, arO.length-1)];
 
       verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth);
       verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth);
@@ -125,7 +120,7 @@ function symmetricWindowSeries(
 
       if (ac > 0 && acCount < ac) {
         stroke(0, 0, 124);
-        airConditioner(windowX - windowWidth, y + conditionerPosition, windowWidth);
+        airConditioner(windowX - windowWidth/2, y + conditionerPosition, windowWidth);
         acCount += 1;
       }
       stroke(0, 0, 0);
@@ -140,6 +135,8 @@ function verticalPaneDef(number, element, ...etc) {
   const y = etc[1];
   const w = etc[2];
 
+  // this is whether we have even or odd panel numbers in one window
+  // not whether we have even or odd panels at all.
   if (isEven(number)) {
     // if we have an even number of panels, 
     // panels should emerge left and right around the center of X
@@ -154,9 +151,13 @@ function verticalPaneDef(number, element, ...etc) {
     // else the first panel should be centered
     // and subsequent panels should be to the left and right of the first one
     for (let i = 1; i <= number; i += 1) {
-      if (i == 1) { // center first element of an odd series
+      if (i == 1) {
+        // center first element of an odd series over x
         console.log('x in panedef', x);
-        element(w, x - (w / 2), y);
+        element(w, x, y);
+        stroke(255, 255, 0);
+        rect(x, y, 1, 40);
+        stroke(0, 0, 0);
         // nb here
       } else if (isEven(i)) { // alternate left and right even/odd remainder
         element(w, x - (w + w / 2), y);
