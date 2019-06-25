@@ -18,6 +18,10 @@ function range(num) {
   return arr;
 }
 
+function getBool() {
+  return Boolean(getRandomIntInclusive(0, 1));
+}
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

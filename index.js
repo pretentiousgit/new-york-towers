@@ -1,9 +1,4 @@
-/* 
-  todo:
-  -- we're working on window repetition
-
-*/
-
+const DEBUG = false;
 let y = 100; // animated line
 
 const canvas = [960, 940]
@@ -18,30 +13,35 @@ const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 const lowerBoundWindowWidth = 32;
 // const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
-const panelStyles = [panelPane, onePaneWindow];
+const panelStyles = [panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow];
+// const panelStyles = [onePaneWindow];
 
 function setup() {
-  createCanvas(...canvas);   // createCanvas must be the first statement
+  createCanvas(...canvas, SVG);   // createCanvas must be the first statement
 
   stroke(0); // Set line drawing color to white
 
   img = loadImage('images/airConditioner2.svg'); // Load the image
 
   frameRate(2);
-  // noLoop();
+  noLoop();
   // TODO: Implement a pause button in the drawing function
 }
 
 function draw() {
   background(255); // Set the background to black
 
-  /* Test rectangle for full canvas size onscreen */
-  // fill(0, 124, 124);
-  // rect(0, 0, canvas[0],canvas[1]);
-  // noFill();
+  if (DEBUG) {
+    /* Test rectangle for full canvas size onscreen */
+    fill(0, 124, 124);
+    rect(0, 0, canvas[0], canvas[1]);
+    noFill();
+  }
 
-  /* Test rectangle for building size onscreen */
-  fill(255, 255, 255);
+  if (DEBUG) {
+    /* Test rectangle for building size onscreen */
+    fill(255, 255, 255);
+  }
   rect(margin, 0, buildingWidth, canvas[1]);
 
   const fireW = getRandomIntInclusive(buildingWidth / 3.1415, buildingWidth / 1.618);
@@ -57,17 +57,18 @@ function draw() {
     const height = (i == 7) ? storyHeight * 1.5 : storyHeight;
     const windows = (i == 6) ? undefined : windowStyle;
     const numberOfWindows = getRandomIntInclusive(2, 5);
-
-    /* reference boxes 1 */
     const lineY = height * i;
 
-    fill(0, 0, 0);
-    line(0, lineY, buildingWidth * 2, lineY);
-    rect(0, lineY, 30, 5);
+    if (DEBUG) {
+      /* reference boxes 1 */
+      fill(0, 0, 0);
+      line(0, lineY, buildingWidth * 2, lineY);
+      rect(0, lineY, 30, 5);
 
-    fill(128, 0, 0);
-    rect(buildingWidth * 2, lineY + height, -30, -5);
-    /* end reference boxes */
+      fill(128, 0, 0);
+      rect(buildingWidth * 2, lineY + height, -30, -5);
+      /* end reference boxes */
+    }
 
     basicStory(
       fireW,
@@ -80,6 +81,14 @@ function draw() {
       i
     );
   }
+  // stroke(0, 0, 0);
+  // for (x = 0; x < 10; x++) {
+  //   for (y = 0; y < 10; y++) {
+  //     rect(x * 10, y * 10, x, y);
+  //   }
+  // }
+  // save("images/generated/towers.svg");      // give file name
+  // print("saved svg");
 }
 
 function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowStyle, numberOfWindows, index, scaleWeight) {
@@ -94,18 +103,20 @@ function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowS
     symmetricWindowSeries(
       numberOfWindows,
       windowStyle, //   windowType = panelPane
-      getRandomIntInclusive(lowerBoundWindowWidth, 48), //   windowWidth
+      getRandomIntInclusive(lowerBoundWindowWidth, 64), //   windowWidth
       margin + buildingWidth / 2, //   x
       y + 10, /* - (10 * scaleWeight) */ //   y
     );
   }
 
-  // center line
-  stroke(0, 124, 69);
-  line(margin + buildingWidth / 2, y, margin + buildingWidth / 2, storyHeight);
-  let c = color(255, 255, 255);
-  fill(c);
-  stroke(0, 0, 0);
+  if (DEBUG) {
+    // center line
+    stroke(0, 124, 69);
+    line(margin + buildingWidth / 2, y, margin + buildingWidth / 2, storyHeight);
+    let c = color(255, 255, 255);
+    fill(c);
+    stroke(0, 0, 0);
+  }
 }
 
 function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, index) {
@@ -120,29 +131,58 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
   // Platform
   rect(x - 2, levelBottom - h / 3, w + 4, 2);
   const numberOfSupports = 18;
+  const isItCurvy = Boolean(getRandomIntInclusive(0, 1) == 0);
   for (let i = 0; i <= numberOfSupports; i += 1) {
     line(x + (w / numberOfSupports * i), levelBottom, x + (w / numberOfSupports * i), levelBottom - h / 3)
+
+
+    if (isItCurvy) {
+      if (i == 1) {
+        bezier(x, levelBottom, x - 10, levelBottom - 6, x - 4, levelBottom - 12, x, levelBottom - h / 3);
+      }
+      if (i == numberOfSupports) {
+        const baseX = x + w;
+        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+      }
+      if (i == 9) {
+        const baseX = x + (w / numberOfSupports * 9);
+        bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
+      }
+      if (i == 10) {
+        const baseX = x + (w / numberOfSupports * 10);
+        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+      }
+    }
   }
 
   // bottom level
-  rect(x, levelBottom - 5, w, 5);
-  rect(x, levelBottom - 7, w, 5);
+  const platX = x;
+  const platY = levelBottom - 5;
+  const platW = w;
+  rect(platX, platY, platW, 5);
+  rect(platX, platY - 2, platW, 5);
 
-  // Ladder 
-  console.log(index);
+  // Ladder
+  let ladderX = (getRandomIntInclusive(0, 1) == 0) ? platX : platX + platW - 12;
+  let ladderY = levelBottom - 15;
+  let ladderExtend = getRandomIntInclusive(-35, 30);
   if (index == 6) {
     /* Rails */
-    rect(x, levelBottom - 25, 2, 45);
-    rect(x - 2, levelBottom - 15, 1, 65);
-    rect(x + 8, levelBottom - 25, 2, 45);
-    rect(x + 10, levelBottom - 15, 1, 65);
+    rect(ladderX - 2, ladderY + ladderExtend, 1, 55);
+    rect(ladderX + 10, ladderY + ladderExtend, 1, 55);
+    rect(ladderX, ladderY, 2, 45);
+    rect(ladderX + 8, ladderY, 2, 45);
+    for (let i = 0; i <= 7; i += 1) {
+      rect(ladderX, ladderY + (5 * i) + 5, 12, 0.5)
+    }
 
     /* Rungs */
     for (let i = 0; i <= 8; i += 1) {
-      rect(x, levelBottom + (5*i), 12, 0.5)
+      rect(ladderX, ladderY + ladderExtend + (5 * i) + 5, 12, 0.5)
     }
   }
-  /* // Rails */
+
+  /* // Rails for stairs */
   const railSupports = 9;
   for (let i = 1; i <= railSupports; i += 1) {
     const rise = levelBottom + 15 - ((h + 14) / railSupports) * i;
