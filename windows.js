@@ -28,13 +28,13 @@ function airConditioner(x = buildingWidth / 2, y = storyHeight, windowWidth) {
 }
 
 function symmetricWindowSeries(
-  q,
+  quantity,
   windowType = panelPane,
   windowWidth,
   x,
   y
 ) {
-  const quantity = 5;
+  // const quantity = 5;
   let internalX = x;
 
   const ac = getRandomIntInclusive(0, quantity);
@@ -73,14 +73,14 @@ function symmetricWindowSeries(
     for (let i = 0; i < pairs; i += 1) {
       const originDistance = (buildingWidth / quantity);
 
-      const x1 = x + (originDistance * (i + 1));
-      const x2 = x - originDistance * (i + 1);
+      const xL = x - windowWidth/2 - originDistance * (i + 1);
+      const xR = x + (originDistance * (i + 1) - windowWidth/2);
 
-      verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth);
-      verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth);
+      verticalPaneDef(panelsInWindows, windowType, xL, y, windowWidth);
+      verticalPaneDef(panelsInWindows, windowType, xR, y, windowWidth);
 
       const randoConditioner = getRandomIntInclusive(0, 1);
-      const windowX = randoConditioner === 0 ? x1 : x2;
+      const windowX = randoConditioner === 0 ? xR : xL;
 
       if (ac > 0 && acCount < ac) {
         stroke(0, 0, 124);
