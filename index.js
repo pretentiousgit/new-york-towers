@@ -8,7 +8,7 @@ const storyHeight = canvas[1] / stories;
 const margin = 10; // center the building
 const lowerBoundWindowWidth = 32;
 
-const numberOfBuildings = Math.round(canvas[0]/buildingWidth);
+const numberOfBuildings = Math.floor(canvas[0] / buildingWidth);
 // const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
 const panelStyles = [panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow];
@@ -42,15 +42,38 @@ function draw() {
   }
   rect(margin, 0, buildingWidth, canvas[1]);
 
-  const fireW = getRandomIntInclusive(buildingWidth / 3.1415, buildingWidth / 1.618);
-  const fireX = getRandomIntInclusive(margin, buildingWidth);
 
-  const windowStyle = panelStyles[getRandomIntInclusive(0, panelStyles.length - 1)];
+
   console.log('check number of buildings', numberOfBuildings);
-  for(let i = 0; i < numberOfBuildings; i +=1) {
-    const buildingOrigin = [margin+(margin + buildingWidth)*i, canvas[1] - (storyHeight - 20)];
-    fill(127*i, 125, 48);
-    rect(...buildingOrigin, 470, 960);
+  for (let i = 0; i < 3; i += 1) {
+    const buildingOrigin = [margin + ((margin + buildingWidth) * i), canvas[1] - (storyHeight - 20)];
+    fill(127 * i, 125, 48);
+    rect(buildingOrigin[0], 0, 470, 960);
+
+    const windowStyle = panelStyles[getRandomIntInclusive(0, panelStyles.length - 1)];
+    const fireW = getRandomIntInclusive(buildingWidth / 3.1415, buildingWidth / 1.618);
+    const fireX = getRandomIntInclusive(buildingOrigin[0], buildingOrigin[0] + (buildingWidth - fireW));
+
+
+    for (let i = 0; i < stories; i += 1) {
+      const height = (i == 7) ? storyHeight * 1.5 : storyHeight;
+      const windows = (i == 6) ? undefined : windowStyle;
+      const numberOfWindows = getRandomIntInclusive(2, 5);
+      const lineY = height * i;
+      
+      fireEscapeLayer(fireW, height, fireX, lineY, i);
+      console.log(i);
+      basicStory(
+        fireW,
+        height,
+        buildingOrigin[0],
+        lineY,
+        fireX,
+        windows,
+        numberOfWindows,
+        i
+      );
+    }
   }
   // for (let i = 0; i < stories; i += 1) {
   //   const marginLeft = margin;
@@ -95,20 +118,21 @@ function draw() {
   // print("saved svg");
 }
 
-function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowStyle, numberOfWindows, index, scaleWeight) {
+function basicStory(fireW = buildingWidth, h = storyHeight, buildingX, y, fireX, windowStyle, numberOfWindows, index, scaleWeight) {
+  console.log('basicStoryX', buildingX);
   stroke(0, 0, 0);
   noFill();
 
   // things should be symmetric
   // they can also be multiply-defined
-  fireEscapeLayer(fireW, h, fireX, y, index);
+  // fireEscapeLayer(fireW, h, fireX, y, index);
 
   if (windowStyle) {
     symmetricWindowSeries(
       numberOfWindows,
       windowStyle, //   windowType = panelPane
       getRandomIntInclusive(lowerBoundWindowWidth, 64), //   windowWidth
-      margin + buildingWidth / 2, //   x
+      buildingX, //   x
       y + 10, /* - (10 * scaleWeight) */ //   y
     );
   }
@@ -116,7 +140,7 @@ function basicStory(fireW = buildingWidth, h = storyHeight, x, y, fireX, windowS
   if (DEBUG) {
     // center line
     stroke(0, 124, 69);
-    line(margin + buildingWidth / 2, y, margin + buildingWidth / 2, storyHeight);
+    line(buildingX, y, buildingX, storyHeight);
     let c = color(255, 255, 255);
     fill(c);
     stroke(0, 0, 0);
@@ -127,49 +151,59 @@ function fireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWid
   stroke(0, 0, 0);
   noFill();
 
+  let fireEscapeX = x;
+  // if(fireEscapeX + w > ((buildingWidth + margin) * index+1)) {
+  //   fireEscapeX = x - w;
+  // } else if (fireEscapeX < ((buildingWidth + margin) * index+1)) {
+  //   // fireEscapeX = ((buildingWidth + margin) * index+1);
+  // }
+
   const levelBottom = y + h;
   const levelTop = y;
-  const railStart = x + w / 4;
-  const railEnd = w + x - w / 4;
-
+  const railStart = fireEscapeX + w / 4;
+  const railEnd = w + fireEscapeX - w / 4;
+  
   // Platform
-  rect(x - 2, levelBottom - h / 3, w + 4, 2);
-  const numberOfSupports = 18;
-  const isItCurvy = Boolean(getRandomIntInclusive(0, 1) == 0);
-  for (let i = 0; i <= numberOfSupports; i += 1) {
-    line(x + (w / numberOfSupports * i), levelBottom, x + (w / numberOfSupports * i), levelBottom - h / 3)
-
-
-    if (isItCurvy) {
-      if (i == 1) {
-        bezier(x, levelBottom, x - 10, levelBottom - 6, x - 4, levelBottom - 12, x, levelBottom - h / 3);
-      }
-      if (i == numberOfSupports) {
-        const baseX = x + w;
-        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
-      }
-      if (i == 9) {
-        const baseX = x + (w / numberOfSupports * 9);
-        bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
-      }
-      if (i == 10) {
-        const baseX = x + (w / numberOfSupports * 10);
-        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
-      }
-    }
-  }
 
   // bottom level
-  const platX = x;
+  const platX = fireEscapeX;
   const platY = levelBottom - 5;
   const platW = w;
   rect(platX, platY, platW, 5);
   rect(platX, platY - 2, platW, 5);
 
+  // handrails
+  rect(fireEscapeX - 2, levelBottom - h / 3, w + 4, 2);
+
+  const numberOfSupports = 18;
+  const isItCurvy = Boolean(getRandomIntInclusive(0, 1) == 0);
+  for (let i = 0; i <= numberOfSupports; i += 1) {
+    line(fireEscapeX + (w / numberOfSupports * i), levelBottom, fireEscapeX + (w / numberOfSupports * i), levelBottom - h / 3)
+
+    if (isItCurvy) {
+      if (i == 1) {
+        bezier(fireEscapeX, levelBottom, fireEscapeX - 10, levelBottom - 6, fireEscapeX - 4, levelBottom - 12, fireEscapeX, levelBottom - h / 3);
+      }
+      if (i == numberOfSupports) {
+        const baseX = fireEscapeX + w;
+        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+      }
+      if (i == 9) {
+        const baseX = fireEscapeX + (w / numberOfSupports * 9);
+        bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
+      }
+      if (i == 10) {
+        const baseX = fireEscapeX + (w / numberOfSupports * 10);
+        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+      }
+    }
+  }
+
   // Ladder
   let ladderX = (getRandomIntInclusive(0, 1) == 0) ? platX : platX + platW - 12;
   let ladderY = levelBottom - 15;
   let ladderExtend = getRandomIntInclusive(-35, 30);
+
   if (index == 6) {
     /* Rails */
     rect(ladderX - 2, ladderY + ladderExtend, 1, 55);
