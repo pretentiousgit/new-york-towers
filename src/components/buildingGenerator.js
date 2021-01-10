@@ -1,7 +1,7 @@
 import { getBool, getRandomIntInclusive, range } from './utils';
 import { panelStyles } from './windows';
 
-function buildingNumbers(config) {
+function buildingGenerator(config) {
   const {
     pageMargin, buildingWidth, minStories, maxStories, pi, canvas, buildingIndex
   } = config;
@@ -35,4 +35,4 @@ function buildingNumbers(config) {
   };
 }
 
-export default buildingNumbers;
+export default buildingGenerator;

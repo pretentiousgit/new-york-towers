@@ -1,39 +1,29 @@
 /* eslint-disable no-param-reassign */
 import * as P5 from './vendor/p5.min';
-import {
-  panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow
-} from './components/windows';
-import { getRandomIntInclusive, getBool } from './components/utils';
-import {buildingNumbers} from './components/buildingGenerator';
-import { drawStory } from './components/drawStory';
+
+import buildingGenerator from './components/buildingGenerator';
+import storyGenerator from './components/storyGenerator';
+import drawStory from './components/drawStory';
 
 const DEBUG = false;
 const y = 100; // animated line
 
-const canvas = [3200, 940];
-const minStories = 6;
-const maxStories = 8;
-const pi = 3.14159;
-const buildingWidth = 470;
-const storyHeight = canvas[1] / stories; // this sets all stories to a consistent height, which isn't true
-const pageMargin = 10; // center the building
-const lowerBoundWindowWidth = 32;
-const numberOfBuildings = 1;
+const buildingConfig = {
+  canvas: [3200, 940],
+  minStories: 6,
+  maxStories: 8,
+  pi: 3.14159,
+  buildingWidth: 470,
+  pageMargin: 10, // center the building
+  lowerBoundWindowWidth: 32,
+  numberOfBuildings: 1,
+  buildingIndex: 0
+};
 
-const genBuilding = buildingNumbers({
-  lowerBoundWindowWidth,
-  pageMargin,
-  buildingWidth,
-  minStories,
-  maxStories,
-  pi,
-  canvas,
-  buildingIndex = 0
-})
+const genBuilding = buildingGenerator(buildingConfig);
+const storyArray = storyGenerator(genBuilding);
 
-const storyArray = {...genBuilding, storyHeight};
-
-/* 
+/*
   GIANT REMINDER TO SELF:
   Processing _is not_ for application development!!
   Processing programatically draws pretty pictures, and has a very poor repaint model!!!!
@@ -50,18 +40,16 @@ const s = (sk) => {
     sk.background(255); // Set the background to black
     sk.noFill();
 
-
     // sk.rect(buildingOrigin[0], 0, 470, 960); // draw building?
 
     // no idea what this is
     sk.rect(margin, 0, buildingWidth, canvas[1]);
-    
+
     // you can only _draw_ things inside this, but we can do number generation pre-this.
     // We need to pass in the instantiated SK context.
-    storyArray.forEach(story => {
+    storyArray.forEach((story) => {
       drawStory(story, sk);
-    })
-     
+    });
   };
 };
 
