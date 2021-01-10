@@ -32,13 +32,21 @@ const genBuilding = buildingNumbers({
 
 // const genStories = {...buildingNumbers, storyHeight};
 
+
+/* 
+  GIANT REMINDER TO SELF:
+  Processing _is not_ for application development!!
+  Processing programatically draws pretty pictures, and has a very poor repaint model!!!!
+  Use it to make pretty things that are basically unhinged visualizations!!!!!
+*/
+
 const s = (sk) => {
   sk.setup = () => {
     sk.createCanvas(...canvas);
     sk.frameRate(1);
   };
 
-  sk.draw = () => {
+  sk.draw = () => { // "Draw" updates every tick, on the java model of canvas animation
     sk.background(255); // Set the background to black
     sk.noFill();
 
@@ -48,6 +56,8 @@ const s = (sk) => {
     // no idea what this is
     sk.rect(margin, 0, buildingWidth, canvas[1]);
      // you can only _draw_ things inside this, but we can do number generation pre-this.
+     // We need to pass in the instantiated SK context.
+     
   };
 };
 
