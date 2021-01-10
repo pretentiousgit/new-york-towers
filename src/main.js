@@ -4,8 +4,8 @@ import {
   panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow
 } from './components/windows';
 import { getRandomIntInclusive, getBool } from './components/utils';
-import {buildingNumbers} from './components/building';
-import 
+import {buildingNumbers} from './components/buildingGenerator';
+import { drawStory } from './components/drawStory';
 
 const DEBUG = false;
 const y = 100; // animated line
@@ -21,6 +21,7 @@ const lowerBoundWindowWidth = 32;
 const numberOfBuildings = 1;
 
 const genBuilding = buildingNumbers({
+  lowerBoundWindowWidth,
   pageMargin,
   buildingWidth,
   minStories,
@@ -30,8 +31,7 @@ const genBuilding = buildingNumbers({
   buildingIndex = 0
 })
 
-// const genStories = {...buildingNumbers, storyHeight};
-
+const storyArray = {...genBuilding, storyHeight};
 
 /* 
   GIANT REMINDER TO SELF:
@@ -55,8 +55,12 @@ const s = (sk) => {
 
     // no idea what this is
     sk.rect(margin, 0, buildingWidth, canvas[1]);
-     // you can only _draw_ things inside this, but we can do number generation pre-this.
-     // We need to pass in the instantiated SK context.
+    
+    // you can only _draw_ things inside this, but we can do number generation pre-this.
+    // We need to pass in the instantiated SK context.
+    storyArray.forEach(story => {
+      drawStory(story, sk);
+    })
      
   };
 };
