@@ -6,8 +6,6 @@ function genVerticalWindowWidths() {
   return getRandomIntInclusive(buildingWidth / 8, buildingWidth / 3);
 }
 
-
-
 function airConditioner(x, y, windowHeight) {
 
     // air conditioners should draw themselves around a midpoint
@@ -266,4 +264,21 @@ function basicGoldenRectangle(w, x = 10, y = 10) {
   return {
     outer, inner
   }
+}
+
+const panelStyles = [panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow];
+
+export {
+  panelStyles,
+  genVerticalWindowWidths,
+  airConditioner,
+  symmetricWindowSeries,
+  verticalPaneDef,
+  panelPane,
+  twoPane,
+  squarePaneWindow,
+  twoPaneWindow,
+  onePaneWindow,
+  framedPanel,
+  basicGoldenRectangle
 }

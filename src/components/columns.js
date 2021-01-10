@@ -1,3 +1,4 @@
+import { getRandomIntInclusive, isEven } from './utils';
 
 function column(n, x, y) {
   // console.log('draw a column', n, x);
@@ -33,7 +34,6 @@ function genColumnNumbers(width = buildingWidth) {
   const footHeight = getRandomIntInclusive(middleWidth * 0.25, middleWidth * 3.14);
   const footWidth = getRandomIntInclusive(capWidth * 0.78, capWidth * 1.09);
 
-
   return {
     middleWidth,
     middleHeight: storyHeight,
@@ -41,9 +41,8 @@ function genColumnNumbers(width = buildingWidth) {
     capWidth,
     footHeight,
     footWidth
-  }
+  };
 }
-
 
 function symmetricColumnSeries(
   origin = [
@@ -53,12 +52,13 @@ function symmetricColumnSeries(
   quantity = 5,
   element = column,
   sharedElementstyle = genColumnNumbers(buildingWidth / 5),
-  rgb = color(241, 170, 100)) {
+  rgb = color(241, 170, 100)
+) {
   fill(rgb);
 
-  const pairs = (!isEven(quantity)) ?
-    (quantity - 1) / 2 :
-    quantity / 2;
+  const pairs = (!isEven(quantity))
+    ? (quantity - 1) / 2
+    : quantity / 2;
 
   if (!isEven(quantity)) {
     column(sharedElementstyle, ...origin);
