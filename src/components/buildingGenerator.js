@@ -29,7 +29,9 @@ function buildingNumbers(config) {
     fireEscapes,
     mirrored,
     curvy,
-    buildingOrigin: [buildingX, buildingY]
+    buildingOrigin: [buildingX, buildingY],
+    buildingWidth,
+    lowerBoundWindowWidth: config
   };
 }
 
