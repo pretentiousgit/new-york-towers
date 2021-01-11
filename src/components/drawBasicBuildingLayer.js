@@ -2,7 +2,7 @@ import { getRandomIntInclusive } from './utils';
 
 function drawBasicBuildingLayer(config, sk) {
   const {
-    buildingX, y, windowStyle, numberOfWindows, groundFloor
+    buildingX, y, windowStyle, numberOfWindows, groundFloor, storyHeight,lowerBoundWindowWidth
   } = config;
 
   sk.stroke(0, 0, 0);
