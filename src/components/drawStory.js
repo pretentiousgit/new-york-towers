@@ -1,5 +1,5 @@
-import { drawFireEscapeLayer } from './drawFireEscapeLayer';
-import { drawBasicBuildingLayer } from './drawBasicBuildingLayer';
+import drawFireEscapeLayer from './drawFireEscapeLayer';
+import drawBasicBuildingLayer from './drawBasicBuildingLayer';
 
 function drawStory(storyData, sk) {
   const {
@@ -15,18 +15,18 @@ function drawStory(storyData, sk) {
     windows,
     lineY
   } = storyData;
+  
   // And here we start actually drawing the building.
   // we need: all the information about the building
   // and an array generated from that which represents each story of the building.
-
   if (fireEscapes === 1) {
-    drawFireEscapeLayer(fireW, height, fireX, lineY, j, curvy, mirrored);
+    drawFireEscapeLayer(fireW, height, fireX, lineY, curvy, mirrored);
   }
 
   if (fireEscapes === 2) {
     const w = fireW / 1.5;
-    drawFireEscapeLayer(w, height, buildingOrigin[0] + 10, lineY, j, curvy, false);
-    drawFireEscapeLayer(w, height, buildingOrigin[0] + (buildingWidth - w), lineY, j, curvy, true);
+    drawFireEscapeLayer(w, height, buildingOrigin[0] + 10, lineY, curvy, false);
+    drawFireEscapeLayer(w, height, buildingOrigin[0] + (buildingWidth - w), lineY, curvy, true);
   }
 
   drawBasicBuildingLayer({
@@ -36,3 +36,5 @@ function drawStory(storyData, sk) {
     numberOfWindows
   }, sk);
 }
+
+export default drawStory;
