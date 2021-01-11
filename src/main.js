@@ -8,13 +8,16 @@ import drawStory from './components/drawStory';
 const DEBUG = false;
 const y = 100; // animated line
 
+const canvas = [3200, 940];
+const pageMargin = 10; // center the building
+
 const buildingConfig = {
-  canvas: [3200, 940],
+  canvas,
+  pageMargin,
   minStories: 6,
   maxStories: 8,
   pi: 3.14159,
   buildingWidth: 470,
-  pageMargin: 10, // center the building
   lowerBoundWindowWidth: 32,
   numberOfBuildings: 1,
   buildingIndex: 0
@@ -40,10 +43,9 @@ const s = (sk) => {
     sk.background(255); // Set the background to black
     sk.noFill();
 
-    // sk.rect(buildingOrigin[0], 0, 470, 960); // draw building?
-
     // no idea what this is
-    sk.rect(margin, 0, buildingWidth, canvas[1]);
+    // sk.rect(buildingOrigin[0], 0, 470, 960); // draw building?
+    // sk.rect(margin, 0, buildingWidth, canvas[1]);
 
     // you can only _draw_ things inside this, but we can do number generation pre-this.
     // We need to pass in the instantiated SK context.
