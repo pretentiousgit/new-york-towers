@@ -15,18 +15,28 @@ function drawStory(storyData, sk) {
     windows,
     lineY
   } = storyData;
-  
+
+  const fireEscapeVal = {
+    w: fireW,
+    h: height,
+    x: fireX,
+    y: lineY,
+    isItCurvy: curvy,
+    isItMirrored: mirrored
+  };
   // And here we start actually drawing the building.
   // we need: all the information about the building
   // and an array generated from that which represents each story of the building.
   if (fireEscapes === 1) {
-    drawFireEscapeLayer(fireW, height, fireX, lineY, curvy, mirrored);
+    drawFireEscapeLayer(fireEscapeVal, sk);
   }
 
+  console.log(buildingOrigin);
   if (fireEscapes === 2) {
-    const w = fireW / 1.5;
-    drawFireEscapeLayer(w, height, buildingOrigin[0] + 10, lineY, curvy, false);
-    drawFireEscapeLayer(w, height, buildingOrigin[0] + (buildingWidth - w), lineY, curvy, true);
+    const escapeDoubleA = { ...fireEscapeVal, x: buildingOrigin[0] + 10 };
+    const escapeDoubleB = { ...fireEscapeVal, x: buildingOrigin[0] + (buildingWidth - fireEscapeVal.w) };
+    drawFireEscapeLayer(escapeDoubleA, sk);
+    drawFireEscapeLayer(escapeDoubleB, sk);
   }
 
   drawBasicBuildingLayer({

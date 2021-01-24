@@ -1,8 +1,15 @@
-
 /// This literally draws a fire escape, story by story.
-function drawFireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, isItCurvy, isItMirrored) {
-  stroke(0, 0, 0);
-  noFill();
+import { getRandomIntInclusive, range } from './utils';
+
+function drawFireEscapeLayer(settings, sk) {
+  // w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, isItCurvy, isItMirrored
+  const {
+    w, h, x, y, isItCurvy, isItMirrored
+  } = settings;
+
+  // set sketch defaults
+  sk.stroke(0, 0, 0);
+  sk.noFill();
 
   const fireEscapeX = x;
   // if(fireEscapeX + w > ((buildingWidth + margin) * index+1)) {
@@ -25,34 +32,34 @@ function drawFireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildin
   const platX = fireEscapeX;
   const platY = levelBottom - 5;
   const platW = w;
-  rect(platX, platY, platW, 5);
-  rect(platX, platY - 2, platW, 5);
+  sk.rect(platX, platY, platW, 5);
+  sk.rect(platX, platY - 2, platW, 5);
 
   // handrails
-  rect(fireEscapeX - 2, levelBottom - h / 3, w + 4, 2);
+  sk.rect(fireEscapeX - 2, levelBottom - h / 3, w + 4, 2);
 
-  const numberOfSupports = 18;
-  for (let i = 0; i <= numberOfSupports; i += 1) {
-    line(fireEscapeX + (w / numberOfSupports * i), levelBottom, fireEscapeX + (w / numberOfSupports * i), levelBottom - h / 3);
+  const numberOfSupports = range(18);
+  numberOfSupports.forEach((support, i) => {
+    sk.line(fireEscapeX + (w / numberOfSupports * i), levelBottom, fireEscapeX + (w / numberOfSupports * i), levelBottom - h / 3);
 
     if (isItCurvy) {
-      if (i == 1) {
-        bezier(fireEscapeX, levelBottom, fireEscapeX - 10, levelBottom - 6, fireEscapeX - 4, levelBottom - 12, fireEscapeX, levelBottom - h / 3);
+      if (i === 1) {
+        sk.bezier(fireEscapeX, levelBottom, fireEscapeX - 10, levelBottom - 6, fireEscapeX - 4, levelBottom - 12, fireEscapeX, levelBottom - h / 3);
       }
-      if (i == numberOfSupports) {
+      if (i === numberOfSupports) {
         const baseX = fireEscapeX + w;
-        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+        sk.bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
       }
-      if (i == 9) {
+      if (i === 9) {
         const baseX = fireEscapeX + (w / numberOfSupports * 9);
-        bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
+        sk.bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
       }
-      if (i == 10) {
+      if (i === 10) {
         const baseX = fireEscapeX + (w / numberOfSupports * 10);
-        bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+        sk.bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
       }
     }
-  }
+  });
 
   // Ladder
   const ladderX = (getRandomIntInclusive(0, 1) == 0) ? platX : platX + platW - 12;
@@ -61,17 +68,17 @@ function drawFireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildin
 
   // if (index == 6) {
   //   /* Rails */
-  //   rect(ladderX - 2, ladderY + ladderExtend, 1, 55);
-  //   rect(ladderX + 10, ladderY + ladderExtend, 1, 55);
-  //   rect(ladderX, ladderY, 2, 45);
-  //   rect(ladderX + 8, ladderY, 2, 45);
+  //   sk.rect(ladderX - 2, ladderY + ladderExtend, 1, 55);
+  //   sk.rect(ladderX + 10, ladderY + ladderExtend, 1, 55);
+  //   sk.rect(ladderX, ladderY, 2, 45);
+  //   sk.rect(ladderX + 8, ladderY, 2, 45);
   //   for (let i = 0; i <= 7; i += 1) {
-  //     rect(ladderX, ladderY + (5 * i) + 5, 12, 0.5);
+  //     sk.rect(ladderX, ladderY + (5 * i) + 5, 12, 0.5);
   //   }
 
   //   /* Rungs */
   //   for (let i = 0; i <= 8; i += 1) {
-  //     rect(ladderX, ladderY + ladderExtend + (5 * i) + 5, 12, 0.5);
+  //     sk.rect(ladderX, ladderY + ladderExtend + (5 * i) + 5, 12, 0.5);
   //   }
   // }
 
@@ -81,30 +88,31 @@ function drawFireEscapeLayer(w = buildingWidth / 2, h = storyHeight, x = buildin
     const rise = levelBottom + 15 - ((h + 14) / railSupports) * i;
     const run = railStart + ((railEnd - railStart) / railSupports * i);
 
-    line(run, rise, run, rise - h / 3);
-    rect(run - 7, rise - 12, 7, 3);
+    sk.line(run, rise, run, rise - h / 3);
+    sk.rect(run - 7, rise - 12, 7, 3);
   }
 
   // stroke(255, 0, 0);
-  line(railStart, levelBottom, railEnd - 10, levelTop);
+  sk.line(railStart, levelBottom, railEnd - 10, levelTop);
 
   // stroke(0, 124, 124);
-  line(railStart + 10, levelBottom, railEnd, levelTop);
+  sk.line(railStart + 10, levelBottom, railEnd, levelTop);
 
   // stroke(150, 0, 150);
-  line(railStart, levelBottom - 15 - h / 14, railEnd, levelTop - h / 3);
-  line(railStart, levelBottom - 19 - h / 14, railEnd, levelTop - h / 3 - 4);
+  sk.line(railStart, levelBottom - 15 - h / 14, railEnd, levelTop - h / 3);
+  sk.line(railStart, levelBottom - 19 - h / 14, railEnd, levelTop - h / 3 - 4);
 
   // /* // Circles at the end of rails */
-  fill(255, 255, 255);
-  circle(railStart, levelBottom - 22, 9);
-  circle(railStart, levelBottom - 22, 5);
+  sk.fill(255, 255, 255);
+  sk.circle(railStart, levelBottom - 22, 9);
+  sk.circle(railStart, levelBottom - 22, 5);
 
-  circle(railEnd, levelTop - 38, 9);
-  circle(railEnd, levelTop - 38, 5);
+  sk.circle(railEnd, levelTop - 38, 9);
+  sk.circle(railEnd, levelTop - 38, 5);
 
-  stroke(0, 0, 0);
-  noFill();
+  // reset sketch defaults before it gets called again
+  sk.stroke(0, 0, 0);
+  sk.noFill();
 }
 
 export default drawFireEscapeLayer;

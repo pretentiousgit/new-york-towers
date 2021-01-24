@@ -5,6 +5,11 @@ import buildingGenerator from './components/buildingGenerator';
 import storyGenerator from './components/storyGenerator';
 import drawStory from './components/drawStory';
 
+function logger(str) {
+  console.log(str);
+}
+logger('Loaded bundle.js');
+
 const DEBUG = false;
 const y = 100; // animated line
 
@@ -50,6 +55,7 @@ const s = (sk) => {
     // you can only _draw_ things inside this, but we can do number generation pre-this.
     // We need to pass in the instantiated SK context.
     storyArray.forEach((story) => {
+      console.log(story);
       drawStory(story, sk);
     });
   };
