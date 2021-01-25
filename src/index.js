@@ -1,5 +1,5 @@
 import {
-  drawPanelPane, onePaneWindow, drawTwoPaneWindow, squarePaneWindow
+  drawPanelPane, drawOnePaneWindow, drawTwoPaneWindow, drawSquarePaneWindow
 } from './components/windows';
 
 // import drawPanelPane from './components/windows.js';
@@ -17,8 +17,8 @@ const lowerBoundWindowWidth = 32;
 const numberOfBuildings = Math.floor(canvas[0] / buildingWidth);
 // const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
-const panelStyles = [drawPanelPane, onePaneWindow, drawTwoPaneWindow, squarePaneWindow];
-// const panelStyles = [onePaneWindow];
+const windowDrawFnList = [drawPanelPane, drawOnePaneWindow, drawTwoPaneWindow, drawSquarePaneWindow];
+// const windowDrawFnList = [drawOnePaneWindow];
 
 function setup() {
   createCanvas(...canvas); // createCanvas must be the first statement
@@ -42,7 +42,7 @@ function draw() {
     const buildingOrigin = [margin + ((margin + buildingWidth) * i), canvas[1] - (storyHeight - 20)];
     rect(buildingOrigin[0], 0, 470, 960);
 
-    const windowStyle = panelStyles[getRandomIntInclusive(0, panelStyles.length - 1)];
+    const windowStyle = windowDrawFnList[getRandomIntInclusive(0, windowDrawFnList.length - 1)];
     const fireW = getRandomIntInclusive(buildingWidth / 3.1415, buildingWidth / 1.618);
     const fireX = getRandomIntInclusive(buildingOrigin[0], buildingOrigin[0] + (buildingWidth - fireW));
     const fireEscapes = getRandomIntInclusive(0, 2);

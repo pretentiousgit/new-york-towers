@@ -1,9 +1,12 @@
 import { getRandomIntInclusive } from './utils';
 import { symmetricWindowSeries } from './symmetricSeries';
+import { windowDrawFnList } from './windows';
+
+const DEBUG = false;
 
 function drawBasicBuildingLayer(config, sk) {
   const {
-    buildingX, y, windowStyle, numberOfWindows, groundFloor, storyHeight, lowerBoundWindowWidth, buildingWidth
+    buildingX, y, groundFloor, storyHeight, lowerBoundWindowWidth
   } = config;
 
   sk.stroke(0, 0, 0);
@@ -19,6 +22,7 @@ function drawBasicBuildingLayer(config, sk) {
   const symmetricSettings = {
     ...config,
     windowWidth: getRandomIntInclusive(lowerBoundWindowWidth, 64),
+    windowDrawFnList,
     x: buildingX,
     y: y + 10 /* - (10 * scaleWeight) */ //   y
   };

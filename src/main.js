@@ -41,7 +41,7 @@ const storyArray = storyGenerator(genBuilding);
 const s = (sk) => {
   sk.setup = () => {
     sk.createCanvas(...canvas);
-    sk.frameRate(1);
+    sk.frameRate(0.2);
   };
 
   sk.draw = () => { // "Draw" updates every tick, on the java model of canvas animation

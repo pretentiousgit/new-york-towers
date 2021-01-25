@@ -1,18 +1,20 @@
 import { getRandomIntInclusive, isEven } from './utils';
-import { verticalPaneDef } from './windows';
+import { verticalPaneDef } from './verticalPane';
 
 /*
     numberOfWindows: numberOfWindows,
-    windowType: windowStyle,
+    drawWindowFn: windowStyle,
     buildingOrigin: buildingX,
     buildingWidth: buildingWidth
 */
 
 function symmetricWindowSeries(config, sk) {
   const {
-    numberOfWindows, buildingWidth, windowType, windowWidth, y, buildingX
+    numberOfWindows, buildingWidth, windowDrawFnList, windowWidth, y, buildingX
   } = config;
 
+  const windowPick = getRandomIntInclusive(0, windowDrawFnList.length);
+  const drawWindowFn = windowDrawFnList[windowPick];
   const ac = getRandomIntInclusive(0, numberOfWindows);
   const acCount = 0;
 
@@ -24,9 +26,9 @@ function symmetricWindowSeries(config, sk) {
 
   if (!isEven(numberOfWindows)) {
     const centerLine = buildingX + buildingWidth / 2;
-
     const centeredX = (buildingX + buildingWidth / 2) - windowWidth / 2;
-    verticalPaneDef(panelsInWindows, windowType, centeredX, y, windowWidth, ac);
+
+    verticalPaneDef(panelsInWindows, drawWindowFn, centeredX, y, windowWidth, ac);
 
     for (let i = 0; i < pairs; i += 1) {
       const interval = buildingWidth / numberOfWindows;
@@ -36,8 +38,8 @@ function symmetricWindowSeries(config, sk) {
       const xL = x1;
       const xR = x2;
 
-      verticalPaneDef(panelsInWindows, windowType, xL, y, windowWidth, ac);
-      verticalPaneDef(panelsInWindows, windowType, xR, y, windowWidth, ac);
+      verticalPaneDef(panelsInWindows, drawWindowFn, xL, y, windowWidth, ac);
+      verticalPaneDef(panelsInWindows, drawWindowFn, xR, y, windowWidth, ac);
     }
   } else {
     /* DEBUG: Symmetric pairs are working fine! */
@@ -59,8 +61,8 @@ function symmetricWindowSeries(config, sk) {
       const arO = arrangementOptions;
       const { x1, x2 } = arO[getRandomIntInclusive(0, arO.length - 1)];
 
-      verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth, ac);
-      verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth, ac);
+      verticalPaneDef(panelsInWindows, drawWindowFn, x1, y, windowWidth, ac);
+      verticalPaneDef(panelsInWindows, drawWindowFn, x2, y, windowWidth, ac);
     }
   }
 }
