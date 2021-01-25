@@ -1,103 +1,10 @@
+import {
+  matrix, getRandomIntInclusive, isEven
+} from './utils';
+import { genGoldenRectangleWindow } from './generators';
 
-let img; // Declare variable 'img'.
-let acCount = 0;
-
-function genVerticalWindowWidths() {
-  return getRandomIntInclusive(buildingWidth / 8, buildingWidth / 3);
-}
-
-function airConditioner(x, y, windowHeight) {
-
-    // air conditioners should draw themselves around a midpoint
-    // air conditioners need a height not a width.
-    // basically a window's height, width, and panelling 
-    // plus whether it has an ac or not
-    // needs to be internal to that window.
-
-  const w = lowerBoundWindowWidth;
-  const xCorrect = x - lowerBoundWindowWidth / 2;
-  const baseHeight = w * 0.618;
-  const yCorrect = getBool() ? windowHeight + y - baseHeight : y;
-
-
-  stroke(0, 0, 0);
-  fill(255, 255, 255);
-  // an a/c is always the same width.x
-  rect(xCorrect, yCorrect, w, baseHeight);
-  rect(xCorrect + 3, yCorrect + 3, w - 6, (baseHeight) - 6);
-
-  rect(xCorrect + 3, yCorrect + 5, w - 6, (baseHeight) - 10);
-  rect(xCorrect + 3, yCorrect + 7, w - 6, (baseHeight) - 14);
-  rect(xCorrect + 3, yCorrect + 9, w - 6, (baseHeight) - 18);
-
-  rect(xCorrect + (w / 2) - 4, yCorrect + (baseHeight) - 2, 8, (baseHeight) - 24);
-  stroke(0, 0, 0);
-  noFill();
-}
-
-function symmetricWindowSeries(
-  quantity,
-  windowType = panelPane,
-  windowWidth,
-  x,
-  y, 
-  buildingOrigin
-) {
-  // const quantity = 5;
-  let internalX = x;
-  const ac = getRandomIntInclusive(0, quantity);
-  acCount = 0;
-
-
-  // const panelsInWindows = getRandomIntInclusive(1, 3);
-  const panelsInWindows = 1;
-  const pairs = (!isEven(quantity)) ?
-    (quantity - 1) / 2 :
-    quantity / 2;
-
-  if (!isEven(quantity)) {
-    const centerLine = x + buildingWidth / 2;
-
-    centeredX = (x + buildingWidth/2) - windowWidth/2;
-    verticalPaneDef(panelsInWindows, windowType, centeredX, y, windowWidth, ac);
-
-    for (let i = 0; i < pairs; i += 1) {
-      const interval = buildingWidth / quantity;
-
-      const x1 = (centerLine - buildingWidth / 2 + (interval * i + 1)) + ((interval - windowWidth) / 2);
-      const x2 = (centerLine + (interval * i) + (interval - (windowWidth/2)));
-      const xL = x1;
-      const xR = x2;
-
-      verticalPaneDef(panelsInWindows, windowType, xL, y, windowWidth, ac);
-      verticalPaneDef(panelsInWindows, windowType, xR, y, windowWidth, ac);
-    }
-  } else {
-    /* DEBUG: Symmetric pairs are working fine! */
-    for (let i = 0; i < pairs; i += 1) {
-      // in non-centered symmetric pairs, elements should
-      // elements should space themselves evenly across the width of the building
-      const centerLine = x + buildingWidth / 2;
-      const interval = buildingWidth / quantity;
-      const centerPane = ((interval - windowWidth) / 2);
-
-      const arrangementOptions = [
-        {
-          name: 'symmetric',
-          x1: (centerLine - buildingWidth / 2 + (interval * i + 1)) + ((interval - windowWidth) / 2),
-          x2: (centerLine + (interval * i) + centerPane)
-        }
-      ]
-
-      const arO = arrangementOptions;
-      const { x1, x2 } = arO[getRandomIntInclusive(0, arO.length - 1)];
-
-      verticalPaneDef(panelsInWindows, windowType, x1, y, windowWidth, ac);
-      verticalPaneDef(panelsInWindows, windowType, x2, y, windowWidth, ac);
-    }
-  }
-}
-function verticalPaneDef(number, element, ...etc) {
+// zpanelsInWindows, windowType, x1, y, windowWidth, ac
+function verticalPaneDef(panelsInWindows, windowType, ...etc) {
   /* width is defined per window panel in the group */
   /* currently, this defines all windows in a symmetric set as being the same width */
 
@@ -106,16 +13,16 @@ function verticalPaneDef(number, element, ...etc) {
   const w = etc[2];
   const ac = etc[3];
 
-  const isThereAC = getRandomIntInclusive(0, 1) == 1 ?
-    Boolean(ac > 0 && acCount < ac) :
-    false;
+  const isThereAC = getRandomIntInclusive(0, 1) === 1
+    ? Boolean(ac > 0 && acCount < ac)
+    : false;
 
   if (isThereAC) { acCount += 1; }
 
   // this is whether we have even or odd panel numbers in one window
   // not whether we have even or odd panels at all.
-  if (isEven(number)) {
-    // if we have an even number of panels, 
+  if (isEven(panelsInWindows)) {
+    // if we have an even number of panels,
     // panels should emerge left and right around the center of X
     // for (let i = 0; i < number; i += 1) {
     //   if (!isEven(i)) {
@@ -127,10 +34,10 @@ function verticalPaneDef(number, element, ...etc) {
   } else {
     // else the first panel should be centered
     // and subsequent panels should be to the left and right of the first one
-    for (let i = 1; i <= number; i += 1) {
-      if (i == 1) {
+    for (let i = 1; i <= panelsInWindows; i += 1) {
+      if (i === 1) {
         // center first element of an odd series over x
-        element(w, x, y, isThereAC);
+        windowType(w, x, y, isThereAC);
         if (DEBUG) {
           stroke(255, 255, 0);
           rect(x, y, 1, 40);
@@ -138,35 +45,43 @@ function verticalPaneDef(number, element, ...etc) {
         }
         // nb here
       } else if (isEven(i)) { // alternate left and right even/odd remainder
-        element(w, x - (w + w / 2), y, isThereAC);
+        windowType(w, x - (w + w / 2), y, isThereAC);
       } else {
-        element(w, x + (w + w / 2) - w, y, isThereAC);
+        windowType(w, x + (w + w / 2) - w, y, isThereAC);
       }
     }
   }
 }
 
-function panelPane(w, x = 10, y = 10, ac = Boolean(false), cols = 3, rows = 3) {
-  let pane = matrix(cols, rows);
+function drawPanelPane(w, x = 10, y = 10, ac = Boolean(false), cols = 3, rows = 3) {
+  const pane = matrix(cols, rows);
 
   noFill();
-  // frame 
-  let frame = basicGoldenRectangle(w, x, y);
-  const { x: x1, y: y1, w: w1, h: h1 } = frame.outer;
-  const { x: x2, y: y2, w: w2, h: h2 } = frame.inner;
+  // frame
+  const frame = genGoldenRectangleWindow(w, x, y);
+  const {
+    x: x1, y: y1, w: w1, h: h1
+  } = frame.outer;
+  const {
+    x: x2, y: y2, w: w2, h: h2
+  } = frame.inner;
   rect(x1, y1, w1, h1);
   rect(x2, y2, w2, h2);
 
   // inject panels
-  let numbers = basicGoldenRectangle(w / cols);
+  let numbers = genGoldenRectangleWindow(w / cols);
   for (let i = 0; i < cols; i += 1) {
     for (let j = 0; j < rows; j += 1) {
-      let posX = x + ((numbers.outer.w) * i);
-      let posY = y + ((numbers.outer.h) * j);
+      const posX = x + ((numbers.outer.w) * i);
+      const posY = y + ((numbers.outer.h) * j);
 
-      numbers = basicGoldenRectangle(w / cols, posX, posY);
-      const { x: x1, y: y1, w: w1, h: h1 } = numbers.outer;
-      const { x: x2, y: y2, w: w2, h: h2 } = numbers.inner;
+      numbers = genGoldenRectangleWindow(w / cols, posX, posY);
+      const {
+        x: x1, y: y1, w: w1, h: h1
+      } = numbers.outer;
+      const {
+        x: x2, y: y2, w: w2, h: h2
+      } = numbers.inner;
       rect(x1, y1, w1, h1);
       rect(x2, y2, w2, h2);
       pane[i][j] = numbers;
@@ -182,8 +97,8 @@ function panelPane(w, x = 10, y = 10, ac = Boolean(false), cols = 3, rows = 3) {
     topL: [pane[0][0].outer.x, pane[0][0].outer.y],
     bottomR: [pane[2][2].outer.x, pane[2][2].outer.y],
     h: h1,
-    w: w1,
-  }
+    w: w1
+  };
 }
 
 function twoPane(fn, w, x, y) {
@@ -193,26 +108,25 @@ function twoPane(fn, w, x, y) {
 }
 
 function squarePaneWindow(w, x = 10, y = 10, ac = Boolean(false)) {
-
   const width = ((w * 2) >= storyHeight - 10) ? 48 : w;
   const numbers = framedPanel(width, x, y, width * 2);
 
   const { outer, inner } = numbers;
-  rect(outer.x, outer.y, outer.w, outer.h); //outer 
-  rect(inner.x, inner.y, inner.w, inner.h); //outer 
-  rect(inner.x, inner.y + inner.h / 2, inner.w, 2)
+  rect(outer.x, outer.y, outer.w, outer.h); // outer
+  rect(inner.x, inner.y, inner.w, inner.h); // outer
+  rect(inner.x, inner.y + inner.h / 2, inner.w, 2);
 
   if (ac) {
     airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
 }
 
-function twoPaneWindow(w, x = 10, y = 10, ac = Boolean(false)) {
-  const numbers = basicGoldenRectangle(w, x, y);
+function drawTwoPaneWindow(w, x = 10, y = 10, ac = Boolean(false)) {
+  const numbers = genGoldenRectangleWindow(w, x, y);
   const { outer, inner } = numbers;
 
-  rect(outer.x, outer.y, outer.w, outer.h); //outer 
-  rect(inner.x, inner.y, inner.w, inner.h); //outer 
+  rect(outer.x, outer.y, outer.w, outer.h); // outer
+  rect(inner.x, inner.y, inner.w, inner.h); // outer
   rect(inner.x, inner.y + (inner.h / 2), inner.w, 2);
 
   if (ac) {
@@ -221,11 +135,11 @@ function twoPaneWindow(w, x = 10, y = 10, ac = Boolean(false)) {
 }
 
 function onePaneWindow(w, x, y, ac = Boolean(false)) {
-  const numbers = basicGoldenRectangle(w, x, y);
+  const numbers = genGoldenRectangleWindow(w, x, y);
   const { outer, inner } = numbers;
 
-  rect(outer.x, outer.y, outer.w, outer.h); //outer 
-  rect(inner.x, inner.y, inner.w, inner.h); //outer
+  rect(outer.x, outer.y, outer.w, outer.h); // outer
+  rect(inner.x, inner.y, inner.w, inner.h); // outer
   if (ac) {
     airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
@@ -235,7 +149,9 @@ function framedPanel(w, x, y, h) {
   const innerPaneScale = 0.98;
   const paneDiff = (1 - innerPaneScale) / 2;
 
-  const outer = { x, y, w, h };
+  const outer = {
+    x, y, w, h
+  };
   const inner = {
     x: x + w / 2 * 0.02,
     y: y + h / 2 * 0.02,
@@ -245,40 +161,19 @@ function framedPanel(w, x, y, h) {
 
   return {
     outer, inner
-  }
-}
-
-function basicGoldenRectangle(w, x = 10, y = 10) {
-  const bits = goldenRatio(w);
-  const innerPaneScale = 0.95;
-  const paneDiff = (1 - innerPaneScale) / 2;
-
-  const outer = { x, y, w: bits.a, h: bits.c };
-  const inner = {
-    x: x + bits.a / 2 * paneDiff,
-    y: y + bits.c / 2 * paneDiff,
-    w: bits.a * innerPaneScale,
-    h: bits.c * innerPaneScale
   };
-
-  return {
-    outer, inner
-  }
 }
 
-const panelStyles = [panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow];
+const panelStyles = [drawPanelPane, onePaneWindow, drawTwoPaneWindow, squarePaneWindow];
 
 export {
   panelStyles,
-  genVerticalWindowWidths,
-  airConditioner,
-  symmetricWindowSeries,
   verticalPaneDef,
-  panelPane,
+  drawPanelPane,
   twoPane,
   squarePaneWindow,
-  twoPaneWindow,
+  drawTwoPaneWindow,
   onePaneWindow,
   framedPanel,
-  basicGoldenRectangle
-}
+  genGoldenRectangleWindow
+};

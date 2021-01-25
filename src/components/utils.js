@@ -41,6 +41,7 @@ function goldenRatio(number) {
   };
 }
 
+
 export {
   matrix,
   range,

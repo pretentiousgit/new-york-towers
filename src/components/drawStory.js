@@ -1,7 +1,7 @@
 import drawFireEscapeLayer from './drawFireEscapeLayer';
 import drawBasicBuildingLayer from './drawBasicBuildingLayer';
 
-function drawStory(storyData, sk) {
+function drawStory(config, sk) {
   const {
     fireW,
     fireX,
@@ -11,10 +11,8 @@ function drawStory(storyData, sk) {
     buildingOrigin,
     buildingWidth,
     height,
-    numberOfWindows,
-    windows,
     lineY
-  } = storyData;
+  } = config;
 
   const fireEscapeVal = {
     w: fireW,
@@ -39,12 +37,7 @@ function drawStory(storyData, sk) {
     drawFireEscapeLayer(escapeDoubleB, sk);
   }
 
-  drawBasicBuildingLayer({
-    buildingX: buildingOrigin[0],
-    lineY,
-    windows,
-    numberOfWindows
-  }, sk);
+  drawBasicBuildingLayer(config, sk);
 }
 
 export default drawStory;

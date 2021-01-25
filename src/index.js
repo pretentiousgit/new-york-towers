@@ -1,8 +1,8 @@
 import {
-  panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow
+  drawPanelPane, onePaneWindow, drawTwoPaneWindow, squarePaneWindow
 } from './components/windows';
 
-// import panelPane from './components/windows.js';
+// import drawPanelPane from './components/windows.js';
 
 const DEBUG = false;
 const y = 100; // animated line
@@ -17,7 +17,7 @@ const lowerBoundWindowWidth = 32;
 const numberOfBuildings = Math.floor(canvas[0] / buildingWidth);
 // const buildingOrigin = [margin, canvas[1] - (storyHeight - 20)];
 
-const panelStyles = [panelPane, onePaneWindow, twoPaneWindow, squarePaneWindow];
+const panelStyles = [drawPanelPane, onePaneWindow, drawTwoPaneWindow, squarePaneWindow];
 // const panelStyles = [onePaneWindow];
 
 function setup() {

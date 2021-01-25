@@ -1,8 +1,9 @@
 import { getRandomIntInclusive } from './utils';
+import { symmetricWindowSeries } from './symmetricSeries';
 
 function drawBasicBuildingLayer(config, sk) {
   const {
-    buildingX, y, windowStyle, numberOfWindows, groundFloor, storyHeight,lowerBoundWindowWidth
+    buildingX, y, windowStyle, numberOfWindows, groundFloor, storyHeight, lowerBoundWindowWidth, buildingWidth
   } = config;
 
   sk.stroke(0, 0, 0);
@@ -12,15 +13,18 @@ function drawBasicBuildingLayer(config, sk) {
   // they can also be multiply-defined
   // fireEscapeLayer(fireW, h, fireX, y, index);
 
+  /* TODO: 
+    -- Pass the building layer config directly to building subfunctions
+  */
+  const symmetricSettings = {
+    ...config,
+    windowWidth: getRandomIntInclusive(lowerBoundWindowWidth, 64),
+    x: buildingX,
+    y: y + 10 /* - (10 * scaleWeight) */ //   y
+  };
+
   if (!groundFloor) {
-    symmetricWindowSeries(
-      numberOfWindows,
-      windowStyle, //   windowType = panelPane
-      getRandomIntInclusive(lowerBoundWindowWidth, 64), //   windowWidth
-      buildingX, //   x
-      y + 10, /* - (10 * scaleWeight) */ //   y
-      buildingX
-    );
+    symmetricWindowSeries(symmetricSettings);
   }
 
   if (DEBUG) {
