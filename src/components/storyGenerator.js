@@ -18,16 +18,16 @@ function storyGenerator(buildingNumbers, sk) {
     const numberOfWindows = (!groundFloor) ? getRandomIntInclusive(2, 5) : null;
     const windows = (groundFloor) ? windowStyle : null;
     const lineY = height * i;
+    const storyY = height * i;
 
-    console.log('height check 1', storyHeight);
-    console.log('height check', height);
     return {
       ...rest,
       groundFloor,
       height,
       numberOfWindows,
       windows,
-      lineY
+      lineY,
+      storyY
     };
   });
 

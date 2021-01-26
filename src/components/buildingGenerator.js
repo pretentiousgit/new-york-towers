@@ -22,17 +22,15 @@ function buildingGenerator(config) {
   const curvy = getBool();
 
   return {
+    ...config,
     windowStyle,
-    storyHeight,
-    stories,
-    fireW,
+    buildingOrigin: [buildingX, buildingY],
     fireX,
     fireEscapes,
     mirrored,
     curvy,
-    buildingOrigin: [buildingX, buildingY],
-    buildingWidth,
-    lowerBoundWindowWidth: config
+    stories,
+    storyHeight
   };
 }
 
