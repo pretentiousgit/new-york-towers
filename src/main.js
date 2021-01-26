@@ -3,7 +3,8 @@ import * as P5 from './vendor/p5.min';
 
 import buildingGenerator from './components/buildingGenerator';
 import storyGenerator from './components/storyGenerator';
-import drawStory from './components/drawStory';
+import { fireEscapeGen } from './components/fireEscapeGen';
+import { drawBasicBuildingLayer } from './components/drawBasicBuildingLayer';
 
 function logger(str) {
   console.log(str);
@@ -41,22 +42,25 @@ const storyArray = storyGenerator(genBuilding);
 const s = (sk) => {
   sk.setup = () => {
     sk.createCanvas(...canvas);
-    sk.frameRate(0.2);
+    sk.frameRate(1);
+    logger(storyArray[0]);
   };
 
   sk.draw = () => { // "Draw" updates every tick, on the java model of canvas animation
     sk.background(255); // Set the background to black
     sk.noFill();
 
-    // no idea what this is
-    // sk.rect(buildingOrigin[0], 0, 470, 960); // draw building?
+    // const testStory = storyArray[0];
+    // logger(testStory);
+    // sk.rect(testStory.buildingOrigin[0], 10, 470, 960); // draw building?
     // sk.rect(margin, 0, buildingWidth, canvas[1]);
 
     // you can only _draw_ things inside this, but we can do number generation pre-this.
     // We need to pass in the instantiated SK context.
     storyArray.forEach((story) => {
-      console.log(story);
-      drawStory(story, sk);
+      // console.log(story);
+      // fireEscapeGen(story, sk);
+      drawBasicBuildingLayer(story, sk);
     });
   };
 };

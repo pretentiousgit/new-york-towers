@@ -1,7 +1,7 @@
 import drawFireEscapeLayer from './drawFireEscapeLayer';
 import drawBasicBuildingLayer from './drawBasicBuildingLayer';
 
-function drawStory(config, sk) {
+function fireEscapeGen(config, sk) {
   const {
     fireW,
     fireX,
@@ -36,8 +36,6 @@ function drawStory(config, sk) {
     drawFireEscapeLayer(escapeDoubleA, sk);
     drawFireEscapeLayer(escapeDoubleB, sk);
   }
-
-  drawBasicBuildingLayer(config, sk);
 }
 
-export default drawStory;
+export { fireEscapeGen };

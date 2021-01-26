@@ -4,7 +4,8 @@ function storyGenerator(buildingNumbers, sk) {
   const {
     windowStyle,
     stories,
-    storyHeight
+    storyHeight,
+    ...rest
   } = buildingNumbers;
 
   const storyArray = stories.map((m, i) => {
@@ -18,8 +19,10 @@ function storyGenerator(buildingNumbers, sk) {
     const windows = (groundFloor) ? windowStyle : null;
     const lineY = height * i;
 
+    console.log('height check 1', storyHeight);
+    console.log('height check', height);
     return {
-      ...buildingNumbers,
+      ...rest,
       groundFloor,
       height,
       numberOfWindows,

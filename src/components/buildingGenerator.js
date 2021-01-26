@@ -8,7 +8,7 @@ function buildingGenerator(config) {
 
   const windowStyle = windowDrawFnList[getRandomIntInclusive(0, windowDrawFnList.length - 1)];
   const stories = range(getRandomIntInclusive(minStories, maxStories));
-  const storyHeight = canvas[1] / stories.length;
+  const storyHeight = Math.round(canvas[1] / stories.length);
 
   // this is like this because canvas draws rectangles on a strict x-y graph from origin, ie: height is sometimes backwards.
   const buildingX = pageMargin + ((pageMargin + buildingWidth) * buildingIndex);
@@ -23,6 +23,7 @@ function buildingGenerator(config) {
 
   return {
     windowStyle,
+    storyHeight,
     stories,
     fireW,
     fireX,
