@@ -35,11 +35,10 @@ function drawBasicBuildingLayer(config) {
 
   if (!groundFloor) {
     symmetricWindowSeries(symmetricSettings);
-    console.log('other settings', symmetricSettings);
-    console.log('other settings', buildingX, symmetricSettings.y, buildingWidth, height);
   } else {
     // TODO: it's extremely EXTREMELY confusing to draw down from the top left corner!
     // draw a ground floor
+    // this will necessitate hiking everything else up half a story
     console.log('ground floor settings', buildingX, storyY, buildingWidth, height);
     p5Sketch.fill(223, 24, 24);
     p5Sketch.rect(10, config.buildingHeight - height, 50, 50);
