@@ -30,20 +30,14 @@ function symmetricWindowSeries(config) {
     p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, ac
   };
 
-  // debugger;
   if (!isEven(numberOfWindows)) {
     drawWindowFn(windowConfig);
   }
 
-  /* TODO The bug shows up for ALL even sets of windows and NO odd sets of windows */
-  // debugger;
-
   for (let i = 0; i < pairs; i += 1) {
-    console.log('what`s up with pairs', pairs);
-
     /* debug */
-    p5Sketch.rect(centerLine, 0, 4, config.buildingHeight);
-    p5Sketch.text(currentStory, buildingX, y);
+    // p5Sketch.rect(centerLine, 0, 4, config.buildingHeight);
+    // p5Sketch.text(currentStory, buildingX, y);
     /* / debug */
 
     const halfBuilding = (buildingWidth / 2);
