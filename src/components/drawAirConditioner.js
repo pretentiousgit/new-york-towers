@@ -2,12 +2,12 @@ import { getBool } from './utils';
 
 function drawAirConditioner(config) {
   const {
-    x, y, windowHeight, p5Sketch, lowerBoundWindowWidth
+    x, y, windowHeight, p5Sketch, acWidth
   } = config;
 
   console.log('okay give me an air conditioner');
   console.log('config in ac', x, y, windowHeight);
-  console.log('config in ac', lowerBoundWindowWidth);
+  console.log('config in ac', acWidth);
   console.log('config in ac', p5Sketch);
   // air conditioners should draw themselves around a midpoint
   // air conditioners need a height not a width.
@@ -15,8 +15,8 @@ function drawAirConditioner(config) {
   // plus whether it has an ac or not
   // needs to be internal to that window.
 
-  const w = lowerBoundWindowWidth;
-  const xCorrect = x - lowerBoundWindowWidth / 2;
+  const w = acWidth;
+  const xCorrect = x - acWidth / 2;
   const baseHeight = w * 0.618;
   const yCorrect = getBool() ? windowHeight + y - baseHeight : y;
 

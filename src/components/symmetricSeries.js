@@ -15,7 +15,7 @@ function getPairSets(numberOfWindows) {
 
 function symmetricWindowSeries(config) {
   const {
-    p5Sketch, numberOfWindows, buildingWidth, drawWindowFn, windowWidth, y, buildingX, lowerBoundWindowWidth
+    p5Sketch, numberOfWindows, buildingWidth, drawWindowFn, windowWidth, y, buildingX
   } = config;
 
   const ac = getRandomIntInclusive(0, numberOfWindows);
@@ -28,7 +28,7 @@ function symmetricWindowSeries(config) {
 
   console.log('airConditioners', drawAirConditioner);
   const windowConfig = {
-    p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, ac, lowerBoundWindowWidth
+    p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, ac, acWidth: config.acWidth
   };
 
   if (!isEven(numberOfWindows)) {
