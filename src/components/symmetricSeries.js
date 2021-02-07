@@ -10,7 +10,7 @@ import { getRandomIntInclusive, isEven } from './utils';
 function symmetricWindowSeries(config) {
   console.log('config symmetric', config)
   const {
-    p5Sketch, numberOfWindows, groundFloor, buildingWidth, drawWindowFn, windowWidth, y, buildingX
+    p5Sketch, numberOfWindows, groundFloor, buildingWidth, drawWindowFn, windowWidth, y, buildingX, currentStory
   } = config;
 
   const ac = getRandomIntInclusive(0, numberOfWindows);
@@ -29,17 +29,32 @@ function symmetricWindowSeries(config) {
   console.log('check position', windowConfig.x, windowConfig.y)
   console.log('check width', windowConfig.w)
   // debugger;
-  drawWindowFn(windowConfig);
+  if(!isEven(numberOfWindows)){
+    drawWindowFn(windowConfig);
+  }
   // debugger;
+  console.log('check pairs', pairs);
   for (let i = 0; i < pairs; i += 1) {
     const interval = buildingWidth / numberOfWindows;
 
+    console.log('interval', interval);
+
     const x1 = (centerLine - buildingWidth / 2 + (interval * i + 1)) + ((interval - windowWidth) / 2);
     const x2 = (centerLine + (interval * i) + (interval - (windowWidth / 2)));
+    
     const xL = x1;
     const xR = x2;
-      drawWindowFn({...windowConfig, x: xR});
-      drawWindowFn({...windowConfig, x: xL});
+
+    console.log('currentStory', currentStory);
+    console.log('Y', y);
+    console.log('numberOfWindows', numberOfWindows);
+    console.log('buildingWidth', buildingWidth);
+    console.log('left X', xL);
+    console.log('right X', xR);
+    p5Sketch.text(currentStory, buildingX, y);
+    drawWindowFn({...windowConfig, x: xR});
+    drawWindowFn({...windowConfig, x: xL});
+    debugger;
   }
 }
 
