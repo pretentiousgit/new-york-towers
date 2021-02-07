@@ -1,11 +1,13 @@
 import {
   matrix, getRandomIntInclusive, isEven
 } from './utils';
+
 import { genGoldenRectangleWindow } from './generators';
+import { drawAirConditioner } from './drawAirConditioner';
 
 function drawPanelPane(config) {
   const {
-    p5Sketch, w, x = 10, y = 10, ac = Boolean(false), cols, rows
+    p5Sketch, w, x = 10, y = 10, airConditioners, cols, rows
   } = config;
   const pane = matrix(cols, rows);
 
@@ -41,9 +43,11 @@ function drawPanelPane(config) {
     }
   }
 
-  // if (ac) {
-  //   airConditioner(x2 + (w2 / 2), y2, h2);
-  // }
+  if (airConditioners) {
+    drawAirConditioner({
+      ...config, x: x2 + (w2 / 2), y: y2, windowHeight: h2
+    });
+  }
 
   // return information about pane?
   return {
@@ -56,7 +60,7 @@ function drawPanelPane(config) {
 
 function drawTwoPaneWindow(config) {
   const {
-    p5Sketch, w, x = 10, y = 10, ac = Boolean(false)
+    p5Sketch, w, x = 10, y = 10, ac: airConditioners
   } = config;
   const numbers = genGoldenRectangleWindow(w, x, y);
   const { outer, inner } = numbers;
@@ -65,30 +69,38 @@ function drawTwoPaneWindow(config) {
   p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
   p5Sketch.rect(inner.x, inner.y + (inner.h / 2), inner.w, 2);
 
-  if (ac) {
-    console.log('missing air conditioner');
-    // airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
+  if (airConditioners) {
+    drawAirConditioner({
+      ...config,
+      x: inner.x + (inner.w / 2),
+      y: inner.y,
+      windowHeight: inner.h
+    });
   }
 }
 
 function drawOnePaneWindow(config) {
   const {
-    p5Sketch, w, x = 10, y = 10, ac = Boolean(false)
+    p5Sketch, w, x = 10, y = 10, ac: airConditioners
   } = config;
   const numbers = genGoldenRectangleWindow(w, x, y);
   const { outer, inner } = numbers;
 
   p5Sketch.rect(outer.x, outer.y, outer.w, outer.h); // outer
   p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
-  if (ac) {
-    console.log('missing air conditioner');
-    // airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
+  if (airConditioners) {
+    drawAirConditioner({
+      ...config,
+      x: inner.x + (inner.w / 2),
+      y: inner.y,
+      windowHeight: inner.h
+    });
   }
 }
 
 function drawSquarePaneWindow(config) {
   const {
-    p5Sketch, storyHeight, w, x = 10, y = 10, ac = Boolean(false)
+    p5Sketch, storyHeight, w, x = 10, y = 10, ac: airConditioners
   } = config;
 
   const width = ((w * 2) >= storyHeight - 10) ? 48 : w;
@@ -99,9 +111,13 @@ function drawSquarePaneWindow(config) {
   p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
   p5Sketch.rect(inner.x, inner.y + inner.h / 2, inner.w, 2);
 
-  if (ac) {
-    console.log('missing air conditioner');
-    // airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
+  if (airConditioners) {
+    drawAirConditioner({
+      ...config,
+      x: inner.x + (inner.w / 2),
+      y: inner.y,
+      windowHeight: inner.h
+    });
   }
 }
 
