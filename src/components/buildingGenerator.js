@@ -1,4 +1,6 @@
-import { getBool, getRandomIntInclusive, range, goldenRatioTallRectangle } from './utils';
+import {
+  getBool, getRandomIntInclusive, range, goldenRatioTallRectangle
+} from './utils';
 import { windowDrawFnList } from './windows';
 
 function buildingGenerator(config) {
@@ -6,7 +8,7 @@ function buildingGenerator(config) {
     pageMargin, buildingWidth, minStories, maxStories, pi, canvas, buildingIndex, lowerBoundWindowWidth, upperBoundWindowWidth
   } = config;
 
-  const windowStyle = windowDrawFnList[0];
+  const windowStyle = windowDrawFnList[0]; //debug: drawSquarePaneWindow
   const stories = range(getRandomIntInclusive(minStories, maxStories));
   const storyHeight = Math.round(canvas[1] / stories.length);
 
@@ -20,9 +22,9 @@ function buildingGenerator(config) {
   const fireW = getRandomIntInclusive(buildingWidth / pi, buildingWidth / (pi / 2));
   const fireX = getRandomIntInclusive(buildingX, buildingX + (buildingWidth - fireW));
 
-  const fireEscapes = getRandomIntInclusive(0, 2);
-  const mirrored = getBool();
-  const curvy = getBool();
+  const fireEscapes = 0;// TODO: ADD FIRE ESCAPES // getRandomIntInclusive(0, 2);
+  const mirrored = true; // getBool();
+  const curvy = true; // getBool();
 
   return {
     ...config,
@@ -31,6 +33,7 @@ function buildingGenerator(config) {
     buildingOrigin: [buildingX, buildingY],
     buildingHeight: storyHeight * stories.length,
     fireX,
+    fireW,
     fireEscapes,
     mirrored,
     curvy,
