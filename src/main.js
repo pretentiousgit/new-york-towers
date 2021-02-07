@@ -40,7 +40,7 @@ const buildingConfig = {
 const s = (p5Sketch) => {
   p5Sketch.setup = () => {
     p5Sketch.createCanvas(...canvas);
-    p5Sketch.frameRate(0.25);
+    p5Sketch.frameRate(0.5);
   };
 
   p5Sketch.draw = () => { // "Draw" updates every tick, on the java model of canvas animation
@@ -60,7 +60,7 @@ const s = (p5Sketch) => {
     storyArray.forEach((story, i) => {
       console.log('story config object', story);
       // debugger;
-      // fireEscapeGen(story, sk);
+      fireEscapeGen({ ...story, p5Sketch });
       /*
         Here we pass the sketch object on every config
         This is annoying and might be better handled with a state manager
