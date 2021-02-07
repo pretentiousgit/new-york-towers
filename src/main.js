@@ -57,7 +57,7 @@ const s = (p5Sketch) => {
     const genBuilding = buildingGenerator(buildingConfig);
     const storyArray = storyGenerator(genBuilding);
 
-    storyArray.forEach((story) => {
+    storyArray.forEach((story, i) => {
       console.log('story config object', story);
       // debugger;
       // fireEscapeGen(story, sk);
@@ -67,7 +67,8 @@ const s = (p5Sketch) => {
        */
       drawBasicBuildingLayer({
         p5Sketch,
-        ...story
+        ...story,
+        currentStory: i
       });
     });
   };
