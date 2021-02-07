@@ -45,7 +45,7 @@
             "comments": 120
           }
         ],
-        "import": ["prefer-default-export", 0],
+        "import/prefer-default-export": "off",
         "indent": [
           "error",
           2
