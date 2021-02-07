@@ -24,13 +24,11 @@ const buildingConfig = {
   maxStories: 8,
   pi: 3.14159,
   buildingWidth: 470,
-  lowerBoundWindowWidth: 32,
+  lowerBoundWindowWidth: 48,
+  upperBoundWindowWidth: 64,
   numberOfBuildings: 1,
   buildingIndex: 0
 };
-
-const genBuilding = buildingGenerator(buildingConfig);
-const storyArray = storyGenerator(genBuilding);
 
 /*
   GIANT REMINDER TO SELF:
@@ -43,7 +41,6 @@ const s = (p5Sketch) => {
   p5Sketch.setup = () => {
     p5Sketch.createCanvas(...canvas);
     p5Sketch.frameRate(1);
-    logger(storyArray[0]);
   };
 
   p5Sketch.draw = () => { // "Draw" updates every tick, on the java model of canvas animation
@@ -57,8 +54,12 @@ const s = (p5Sketch) => {
 
     // you can only _draw_ things inside this, but we can do number generation pre-this.
     // We need to pass in the instantiated SK context.
+    const genBuilding = buildingGenerator(buildingConfig);
+    const storyArray = storyGenerator(genBuilding);
+
     storyArray.forEach((story) => {
-      // console.log(story);
+      console.log('story config object', story);
+      // debugger;
       // fireEscapeGen(story, sk);
       /*
         Here we pass the sketch object on every config

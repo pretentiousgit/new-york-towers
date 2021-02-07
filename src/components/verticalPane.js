@@ -9,10 +9,9 @@ function verticalPaneDef(config) {
   /* width is defined per window panel in the group */
   /* currently, this defines all windows in a symmetric set as being the same width */
 
-  const isThereAC = Boolean(getRandomIntInclusive(0, 1) === 1); // TODO: later we will do something about the air conditioner count.
-
   // center first element of an odd series over x
-  drawWindowFn(config);
+  // drawWindowFn(config);
+  
   if (DEBUG) {
     p5Sketch.stroke(255, 255, 0);
     p5Sketch.rect(x, y, 1, 40);

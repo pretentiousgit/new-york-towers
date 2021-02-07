@@ -33,7 +33,14 @@ function isEven(someNumber) {
   return (someNumber % 2 === 0);
 }
 
-function goldenRatio(number) {
+function goldenRatioTallRectangle(number){
+  return {
+    width: number/1.618,
+    height: number
+  }
+}
+
+function goldenRatioByWidth(number) {
   return {
     a: number,
     b: number * 0.618,
@@ -48,5 +55,6 @@ export {
   getBool,
   getRandomIntInclusive,
   isEven,
-  goldenRatio
+  goldenRatioTallRectangle,
+  goldenRatioByWidth
 };

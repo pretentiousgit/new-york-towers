@@ -1,14 +1,17 @@
-import { getBool, getRandomIntInclusive, range } from './utils';
+import { getBool, getRandomIntInclusive, range, goldenRatioTallRectangle } from './utils';
 import { windowDrawFnList } from './windows';
 
 function buildingGenerator(config) {
   const {
-    pageMargin, buildingWidth, minStories, maxStories, pi, canvas, buildingIndex
+    pageMargin, buildingWidth, minStories, maxStories, pi, canvas, buildingIndex, lowerBoundWindowWidth, upperBoundWindowWidth
   } = config;
 
-  const windowStyle = windowDrawFnList[getRandomIntInclusive(0, windowDrawFnList.length - 1)];
+  const windowStyle = windowDrawFnList[0];
   const stories = range(getRandomIntInclusive(minStories, maxStories));
   const storyHeight = Math.round(canvas[1] / stories.length);
+  
+  const windowProportions = goldenRatioTallRectangle(storyHeight - getRandomIntInclusive(lowerBoundWindowWidth, upperBoundWindowWidth)); // TODO: why are these random? they aren't random in person? Are they??
+  const windowWidth = windowProportions.width;
 
   // this is like this because canvas draws rectangles on a strict x-y graph from origin, ie: height is sometimes backwards.
   const buildingX = pageMargin + ((pageMargin + buildingWidth) * buildingIndex);
@@ -24,6 +27,7 @@ function buildingGenerator(config) {
   return {
     ...config,
     windowStyle,
+    windowWidth,
     buildingOrigin: [buildingX, buildingY],
     fireX,
     fireEscapes,

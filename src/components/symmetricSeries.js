@@ -9,13 +9,11 @@ import { verticalPaneDef } from './verticalPane';
 */
 
 function symmetricWindowSeries(config) {
+  console.log('config symmetric', config)
   const {
-    p5Sketch, numberOfWindows, buildingWidth, windowDrawFnList, windowWidth, y, buildingX
+    p5Sketch, numberOfWindows, groundFloor, buildingWidth, drawWindowFn, windowWidth, y, buildingX
   } = config;
 
-  const windowPick = getRandomIntInclusive(0, windowDrawFnList.length - 1);
-  const drawWindowFn = windowDrawFnList[windowPick];
-  
   const ac = getRandomIntInclusive(0, numberOfWindows);
   const acCount = 0;
 
@@ -31,10 +29,11 @@ function symmetricWindowSeries(config) {
   const verticalPaneConfig = {
     p5Sketch, panelsInWindows, drawWindowFn, x: centeredX, y, w:windowWidth, ac
   }
-
-  console.log(p5Sketch);
-  verticalPaneDef(verticalPaneConfig);
-
+  console.log('check position', verticalPaneConfig.x, verticalPaneConfig.y)
+  console.log('check width', verticalPaneConfig.w)
+  // debugger;
+  drawWindowFn(verticalPaneConfig);
+  // debugger;
   // for (let i = 0; i < pairs; i += 1) {
   //   const interval = buildingWidth / numberOfWindows;
 

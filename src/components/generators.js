@@ -1,4 +1,4 @@
-import { goldenRatio, getRandomIntInclusive } from './utils';
+import { goldenRatioTallRectangle, getRandomIntInclusive } from './utils';
 
 function genGoldenRectangleWindow(w, x = 10, y = 10) {
   const bits = goldenRatio(w);
