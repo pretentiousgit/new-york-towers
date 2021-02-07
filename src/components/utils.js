@@ -33,11 +33,11 @@ function isEven(someNumber) {
   return (someNumber % 2 === 0);
 }
 
-function goldenRatioTallRectangle(number){
+function goldenRatioTallRectangle(number) {
   return {
-    width: number/1.618,
+    width: number / 1.618,
     height: number
-  }
+  };
 }
 
 function goldenRatioByWidth(number) {
@@ -47,7 +47,6 @@ function goldenRatioByWidth(number) {
     c: number * 1.618
   };
 }
-
 
 export {
   matrix,

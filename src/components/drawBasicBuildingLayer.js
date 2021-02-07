@@ -15,12 +15,11 @@ function drawBasicBuildingLayer(config) {
   p5Sketch.noFill();
   p5Sketch.rect(buildingX, storyY, buildingWidth, height);
 
-
-  /* 
+  /*
     What should happen:
     ==> Generate a building with a window style and a blank ground floor
     ==> Fire escapes are a yes or no by building
-  
+
   */
 
   // things should be symmetric
@@ -30,8 +29,9 @@ function drawBasicBuildingLayer(config) {
   /* TODO:
     -- Pass the building layer config directly to building subfunctions
   */
- 
+
   //  Window type is set per building by buildingGenerator
+  console.log('height?', config.buildingHeight);
   const symmetricSettings = {
     ...config,
     buildingX,

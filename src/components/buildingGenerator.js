@@ -9,7 +9,7 @@ function buildingGenerator(config) {
   const windowStyle = windowDrawFnList[0];
   const stories = range(getRandomIntInclusive(minStories, maxStories));
   const storyHeight = Math.round(canvas[1] / stories.length);
-  
+
   const windowProportions = goldenRatioTallRectangle(storyHeight - getRandomIntInclusive(lowerBoundWindowWidth, upperBoundWindowWidth)); // TODO: why are these random? they aren't random in person? Are they??
   const windowWidth = windowProportions.width;
 
@@ -29,6 +29,7 @@ function buildingGenerator(config) {
     windowStyle,
     windowWidth,
     buildingOrigin: [buildingX, buildingY],
+    buildingHeight: storyHeight * stories.length,
     fireX,
     fireEscapes,
     mirrored,

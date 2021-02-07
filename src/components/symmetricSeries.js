@@ -6,9 +6,14 @@ import { getRandomIntInclusive, isEven } from './utils';
     buildingOrigin: buildingX,
     buildingWidth: buildingWidth
 */
+function getPairSets(numberOfWindows) {
+  return (!isEven(numberOfWindows))
+    ? (numberOfWindows - 1) / 2
+    : numberOfWindows / 2;
+}
 
 function symmetricWindowSeries(config) {
-  console.log('config symmetric', config)
+  console.log('config symmetric', config);
   const {
     p5Sketch, numberOfWindows, groundFloor, buildingWidth, drawWindowFn, windowWidth, y, buildingX, currentStory
   } = config;
@@ -16,45 +21,49 @@ function symmetricWindowSeries(config) {
   const ac = getRandomIntInclusive(0, numberOfWindows);
   const acCount = 0;
 
-  const pairs = (!isEven(numberOfWindows))
-    ? (numberOfWindows - 1) / 2
-    : numberOfWindows / 2;
+  const pairs = getPairSets(numberOfWindows);
 
   const centerLine = buildingX + buildingWidth / 2;
   const centeredX = (buildingX + buildingWidth / 2) - windowWidth / 2;
 
   const windowConfig = {
-    p5Sketch, drawWindowFn, x: centeredX, y, w:windowWidth, ac
-  }
-  console.log('check position', windowConfig.x, windowConfig.y)
-  console.log('check width', windowConfig.w)
+    p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, ac
+  };
+
   // debugger;
-  if(!isEven(numberOfWindows)){
+  if (!isEven(numberOfWindows)) {
     drawWindowFn(windowConfig);
   }
+
+  /* TODO The bug shows up for ALL even sets of windows and NO odd sets of windows */
   // debugger;
-  console.log('check pairs', pairs);
+
   for (let i = 0; i < pairs; i += 1) {
-    const interval = buildingWidth / numberOfWindows;
+    console.log('what`s up with pairs', pairs);
 
-    console.log('interval', interval);
-
-    const x1 = (centerLine - buildingWidth / 2 + (interval * i + 1)) + ((interval - windowWidth) / 2);
-    const x2 = (centerLine + (interval * i) + (interval - (windowWidth / 2)));
-    
-    const xL = x1;
-    const xR = x2;
-
-    console.log('currentStory', currentStory);
-    console.log('Y', y);
-    console.log('numberOfWindows', numberOfWindows);
-    console.log('buildingWidth', buildingWidth);
-    console.log('left X', xL);
-    console.log('right X', xR);
+    /* debug */
+    p5Sketch.rect(centerLine, 0, 4, config.buildingHeight);
     p5Sketch.text(currentStory, buildingX, y);
-    drawWindowFn({...windowConfig, x: xR});
-    drawWindowFn({...windowConfig, x: xL});
-    debugger;
+    /* / debug */
+
+    const halfBuilding = (buildingWidth / 2);
+
+    const interval = buildingWidth / numberOfWindows;
+    const howManyIntervals = (interval * i) + 1;
+    const windowWidthTweak = (interval - windowWidth) / 2;
+
+    // Math to draw the left half of the building
+    const farLeftEdge = centerLine - halfBuilding;
+
+    // Math to draw the mirrored right half the building
+    const farRightEdge = (centerLine + halfBuilding) - windowWidth;
+
+    const xL = farLeftEdge + howManyIntervals + windowWidthTweak;
+    const xR = farRightEdge - howManyIntervals - windowWidthTweak;
+
+    drawWindowFn({ ...windowConfig, x: xL });
+    drawWindowFn({ ...windowConfig, x: xR });
+    // debugger;
   }
 }
 

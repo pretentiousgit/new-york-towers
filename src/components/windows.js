@@ -81,7 +81,7 @@ function drawOnePaneWindow(config) {
   p5Sketch.rect(outer.x, outer.y, outer.w, outer.h); // outer
   p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
   if (ac) {
-    console.log('missing air conditioner')
+    console.log('missing air conditioner');
     // airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
 }
@@ -100,7 +100,7 @@ function drawSquarePaneWindow(config) {
   p5Sketch.rect(inner.x, inner.y + inner.h / 2, inner.w, 2);
 
   if (ac) {
-    console.log('missing air conditioner')
+    console.log('missing air conditioner');
     // airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
 }
@@ -128,7 +128,7 @@ const windowDrawFnList = [drawSquarePaneWindow, drawTwoPaneWindow, drawOnePaneWi
 
 export {
   drawPanelPane,
-  windowDrawFnList,
+  windowDrawFnList
   // twoPane,
   // drawSquarePaneWindow,
   // drawTwoPaneWindow,
