@@ -1,15 +1,14 @@
 /// This literally draws a fire escape, story by story.
 import { getRandomIntInclusive, range } from './utils';
 
-function drawFireEscapeLayer(settings, sk) {
-  // w = buildingWidth / 2, h = storyHeight, x = buildingWidth / 2, y = storyHeight, isItCurvy, isItMirrored
+function drawFireEscapeLayer(settings) {
   const {
-    w, h, x, y, isItCurvy, isItMirrored
+    w, h, x, y, isItCurvy, isItMirrored, p5Sketch
   } = settings;
 
   // set sketch defaults
-  sk.stroke(0, 0, 0);
-  sk.noFill();
+  p5Sketch.stroke(0, 0, 0);
+  p5Sketch.noFill();
 
   const fireEscapeX = x;
   // if(fireEscapeX + w > ((buildingWidth + margin) * index+1)) {
@@ -32,31 +31,31 @@ function drawFireEscapeLayer(settings, sk) {
   const platX = fireEscapeX;
   const platY = levelBottom - 5;
   const platW = w;
-  sk.rect(platX, platY, platW, 5);
-  sk.rect(platX, platY - 2, platW, 5);
+  p5Sketch.rect(platX, platY, platW, 5);
+  p5Sketch.rect(platX, platY - 2, platW, 5);
 
   // handrails
-  sk.rect(fireEscapeX - 2, levelBottom - h / 3, w + 4, 2);
+  p5Sketch.rect(fireEscapeX - 2, levelBottom - h / 3, w + 4, 2);
 
   const numberOfSupports = range(18);
   numberOfSupports.forEach((support, i) => {
-    sk.line(fireEscapeX + (w / numberOfSupports * i), levelBottom, fireEscapeX + (w / numberOfSupports * i), levelBottom - h / 3);
+    p5Sketch.line(fireEscapeX + (w / numberOfSupports * i), levelBottom, fireEscapeX + (w / numberOfSupports * i), levelBottom - h / 3);
 
     if (isItCurvy) {
       if (i === 1) {
-        sk.bezier(fireEscapeX, levelBottom, fireEscapeX - 10, levelBottom - 6, fireEscapeX - 4, levelBottom - 12, fireEscapeX, levelBottom - h / 3);
+        p5Sketch.bezier(fireEscapeX, levelBottom, fireEscapeX - 10, levelBottom - 6, fireEscapeX - 4, levelBottom - 12, fireEscapeX, levelBottom - h / 3);
       }
       if (i === numberOfSupports) {
         const baseX = fireEscapeX + w;
-        sk.bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+        p5Sketch.bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
       }
       if (i === 9) {
         const baseX = fireEscapeX + (w / numberOfSupports * 9);
-        sk.bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
+        p5Sketch.bezier(baseX, levelBottom, baseX - 10, levelBottom - 6, baseX - 4, levelBottom - 12, baseX, levelBottom - h / 3);
       }
       if (i === 10) {
         const baseX = fireEscapeX + (w / numberOfSupports * 10);
-        sk.bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
+        p5Sketch.bezier(baseX, levelBottom, baseX + 10, levelBottom - 6, baseX + 4, levelBottom - 12, baseX, levelBottom - h / 3);
       }
     }
   });
@@ -88,31 +87,31 @@ function drawFireEscapeLayer(settings, sk) {
     const rise = levelBottom + 15 - ((h + 14) / railSupports) * i;
     const run = railStart + ((railEnd - railStart) / railSupports * i);
 
-    sk.line(run, rise, run, rise - h / 3);
-    sk.rect(run - 7, rise - 12, 7, 3);
+    p5Sketch.line(run, rise, run, rise - h / 3);
+    p5Sketch.rect(run - 7, rise - 12, 7, 3);
   }
 
   // stroke(255, 0, 0);
-  sk.line(railStart, levelBottom, railEnd - 10, levelTop);
+  p5Sketch.line(railStart, levelBottom, railEnd - 10, levelTop);
 
   // stroke(0, 124, 124);
-  sk.line(railStart + 10, levelBottom, railEnd, levelTop);
+  p5Sketch.line(railStart + 10, levelBottom, railEnd, levelTop);
 
   // stroke(150, 0, 150);
-  sk.line(railStart, levelBottom - 15 - h / 14, railEnd, levelTop - h / 3);
-  sk.line(railStart, levelBottom - 19 - h / 14, railEnd, levelTop - h / 3 - 4);
+  p5Sketch.line(railStart, levelBottom - 15 - h / 14, railEnd, levelTop - h / 3);
+  p5Sketch.line(railStart, levelBottom - 19 - h / 14, railEnd, levelTop - h / 3 - 4);
 
   // /* // Circles at the end of rails */
-  sk.fill(255, 255, 255);
-  sk.circle(railStart, levelBottom - 22, 9);
-  sk.circle(railStart, levelBottom - 22, 5);
+  p5Sketch.fill(255, 255, 255);
+  p5Sketch.circle(railStart, levelBottom - 22, 9);
+  p5Sketch.circle(railStart, levelBottom - 22, 5);
 
-  sk.circle(railEnd, levelTop - 38, 9);
-  sk.circle(railEnd, levelTop - 38, 5);
+  p5Sketch.circle(railEnd, levelTop - 38, 9);
+  p5Sketch.circle(railEnd, levelTop - 38, 5);
 
   // reset sketch defaults before it gets called again
-  sk.stroke(0, 0, 0);
-  sk.noFill();
+  p5Sketch.stroke(0, 0, 0);
+  p5Sketch.noFill();
 }
 
 export default drawFireEscapeLayer;
