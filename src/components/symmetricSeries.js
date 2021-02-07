@@ -13,9 +13,8 @@ function getPairSets(numberOfWindows) {
 }
 
 function symmetricWindowSeries(config) {
-  console.log('config symmetric', config);
   const {
-    p5Sketch, numberOfWindows, groundFloor, buildingWidth, drawWindowFn, windowWidth, y, buildingX, currentStory
+    p5Sketch, numberOfWindows, buildingWidth, drawWindowFn, windowWidth, y, buildingX
   } = config;
 
   const ac = getRandomIntInclusive(0, numberOfWindows);

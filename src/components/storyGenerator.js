@@ -13,7 +13,7 @@ function storyGenerator(buildingNumbers, sk) {
     // they do not have fire escapes
     // and have wildly unique windows
     // this is supposed to set if we're at the BOTTOM of the building, which is ironically the _largest_ number;
-    const groundFloor = Boolean(i === stories.length);
+    const groundFloor = Boolean(i === stories.length - 1);
     const height = (!groundFloor) ? storyHeight : storyHeight * 1.5;
     const numberOfWindows = (!groundFloor) ? getRandomIntInclusive(2, 5) : null;
     const drawWindowFn = (!groundFloor) ? windowStyle : null;

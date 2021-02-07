@@ -5,7 +5,7 @@ const DEBUG = false;
 
 function drawBasicBuildingLayer(config) {
   const {
-    p5Sketch, buildingOrigin, buildingWidth, storyY, groundFloor, height, lowerBoundWindowWidth
+    p5Sketch, buildingOrigin, buildingWidth, storyY, groundFloor, height
   } = config;
 
   const buildingX = buildingOrigin[0];
@@ -26,12 +26,7 @@ function drawBasicBuildingLayer(config) {
   // they can also be multiply-defined
   // fireEscapeLayer(fireW, h, fireX, y, index);
 
-  /* TODO:
-    -- Pass the building layer config directly to building subfunctions
-  */
-
   //  Window type is set per building by buildingGenerator
-  console.log('height?', config.buildingHeight);
   const symmetricSettings = {
     ...config,
     buildingX,
@@ -40,6 +35,14 @@ function drawBasicBuildingLayer(config) {
 
   if (!groundFloor) {
     symmetricWindowSeries(symmetricSettings);
+    console.log('other settings', symmetricSettings);
+    console.log('other settings', buildingX, symmetricSettings.y, buildingWidth, height);
+  } else {
+    // TODO: it's extremely EXTREMELY confusing to draw down from the top left corner!
+    // draw a ground floor
+    console.log('ground floor settings', buildingX, storyY, buildingWidth, height);
+    p5Sketch.fill(223, 24, 24);
+    p5Sketch.rect(10, config.buildingHeight - height, 50, 50);
   }
 
   if (DEBUG) {
