@@ -39,16 +39,16 @@ const storyArray = storyGenerator(genBuilding);
   Use it to make pretty things that are basically unhinged visualizations!!!!!
 */
 
-const s = (sk) => {
-  sk.setup = () => {
-    sk.createCanvas(...canvas);
-    sk.frameRate(1);
+const s = (p5Sketch) => {
+  p5Sketch.setup = () => {
+    p5Sketch.createCanvas(...canvas);
+    p5Sketch.frameRate(1);
     logger(storyArray[0]);
   };
 
-  sk.draw = () => { // "Draw" updates every tick, on the java model of canvas animation
-    sk.background(255); // Set the background to black
-    sk.noFill();
+  p5Sketch.draw = () => { // "Draw" updates every tick, on the java model of canvas animation
+    p5Sketch.background(255); // Set the background to black
+    p5Sketch.noFill();
 
     // const testStory = storyArray[0];
     // logger(testStory);
@@ -60,7 +60,7 @@ const s = (sk) => {
     storyArray.forEach((story) => {
       // console.log(story);
       // fireEscapeGen(story, sk);
-      drawBasicBuildingLayer(story, sk);
+      drawBasicBuildingLayer(story, p5Sketch);
     });
   };
 };

@@ -4,16 +4,17 @@ import { windowDrawFnList } from './windows';
 
 const DEBUG = false;
 
-function drawBasicBuildingLayer(config, sk) {
+function drawBasicBuildingLayer(config, p5Sketch) {
   const {
     buildingOrigin, buildingWidth, storyY, groundFloor, height, lowerBoundWindowWidth
   } = config;
 
   const buildingX = buildingOrigin[0];
 
-  sk.stroke(0, 0, 0);
-  sk.noFill();
-  sk.rect(buildingX, storyY, buildingWidth, height);
+  // Draw a box for a story
+  p5Sketch.stroke(0, 0, 0);
+  p5Sketch.noFill();
+  p5Sketch.rect(buildingX, storyY, buildingWidth, height);
   // sk.rect(10, 10, 480, 140);
   // things should be symmetric
   // they can also be multiply-defined
@@ -22,7 +23,7 @@ function drawBasicBuildingLayer(config, sk) {
   /* TODO:
     -- Pass the building layer config directly to building subfunctions
   */
-//  numberOfWindows, buildingWidth,  windowWidth, 
+  //  numberOfWindows, buildingWidth,  windowWidth, 
   const symmetricSettings = {
     ...config,
     windowWidth: getRandomIntInclusive(lowerBoundWindowWidth, 64),
@@ -31,19 +32,17 @@ function drawBasicBuildingLayer(config, sk) {
     y: storyY + 10 /* - (10 * scaleWeight) */ //   y
   };
 
-  console.log("lowerBoundWindowWidth", lowerBoundWindowWidth);
-  console.log("symmetricSettings", symmetricSettings.windowWidth);
   if (!groundFloor) {
     symmetricWindowSeries(symmetricSettings);
   }
 
   if (DEBUG) {
     // center line
-    sk.stroke(0, 124, 69);
-    sk.line(buildingX, storyY, buildingX, height);
-    const c = sk.color(255, 255, 255);
-    sk.fill(c);
-    sk.stroke(0, 0, 0);
+    p5Sketch.stroke(0, 124, 69);
+    p5Sketch.line(buildingX, storyY, buildingX, height);
+    const c = p5Sketch.color(255, 255, 255);
+    p5Sketch.fill(c);
+    p5Sketch.stroke(0, 0, 0);
   }
 }
 

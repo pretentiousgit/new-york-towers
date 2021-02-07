@@ -3,13 +3,13 @@ import {
 } from './utils';
 import { genGoldenRectangleWindow } from './generators';
 
-function drawPanelPane(config, sk) {
+function drawPanelPane(config, p5Sketch) {
   const {
     w, x = 10, y = 10, ac = Boolean(false), cols, rows
   } = config;
   const pane = matrix(cols, rows);
 
-  sk.noFill();
+  p5Sketch.noFill();
   // frame
   const frame = genGoldenRectangleWindow(w, x, y);
   const {
@@ -18,8 +18,8 @@ function drawPanelPane(config, sk) {
   const {
     x: x2, y: y2, w: w2, h: h2
   } = frame.inner;
-  sk.rect(x1, y1, w1, h1);
-  sk.rect(x2, y2, w2, h2);
+  p5Sketch.rect(x1, y1, w1, h1);
+  p5Sketch.rect(x2, y2, w2, h2);
 
   // inject panels
   let numbers = genGoldenRectangleWindow(w / cols);
@@ -35,8 +35,8 @@ function drawPanelPane(config, sk) {
       const {
         x: x4, y: y4, w: w4, h: h4
       } = numbers.inner;
-      sk.rect(x3, y3, w3, h3);
-      sk.rect(x4, y4, w4, h4);
+      p5Sketch.rect(x3, y3, w3, h3);
+      p5Sketch.rect(x4, y4, w4, h4);
       pane[i][j] = numbers;
     }
   }
@@ -54,37 +54,37 @@ function drawPanelPane(config, sk) {
   };
 }
 
-function drawTwoPaneWindow(config, sk) {
+function drawTwoPaneWindow(config, p5Sketch) {
   const {
     w, x = 10, y = 10, ac = Boolean(false)
   } = config;
   const numbers = genGoldenRectangleWindow(w, x, y);
   const { outer, inner } = numbers;
 
-  rect(outer.x, outer.y, outer.w, outer.h); // outer
-  rect(inner.x, inner.y, inner.w, inner.h); // outer
-  rect(inner.x, inner.y + (inner.h / 2), inner.w, 2);
+  p5Sketch.rect(outer.x, outer.y, outer.w, outer.h); // outer
+  p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
+  p5Sketch.rect(inner.x, inner.y + (inner.h / 2), inner.w, 2);
 
   if (ac) {
     airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
 }
 
-function drawOnePaneWindow(config, sk) {
+function drawOnePaneWindow(config, p5Sketch) {
   const {
     w, x = 10, y = 10, ac = Boolean(false)
   } = config;
   const numbers = genGoldenRectangleWindow(w, x, y);
   const { outer, inner } = numbers;
 
-  rect(outer.x, outer.y, outer.w, outer.h); // outer
-  rect(inner.x, inner.y, inner.w, inner.h); // outer
+  p5Sketch.rect(outer.x, outer.y, outer.w, outer.h); // outer
+  p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
   if (ac) {
     airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
   }
 }
 
-function drawSquarePaneWindow(config, sk) {
+function drawSquarePaneWindow(config, p5Sketch) {
   const {
     w, x = 10, y = 10, ac = Boolean(false)
   } = config;
@@ -93,9 +93,9 @@ function drawSquarePaneWindow(config, sk) {
   const numbers = genFramedPanelVal(width, x, y, width * 2);
 
   const { outer, inner } = numbers;
-  sk.rect(outer.x, outer.y, outer.w, outer.h); // outer
-  sk.rect(inner.x, inner.y, inner.w, inner.h); // outer
-  sk.rect(inner.x, inner.y + inner.h / 2, inner.w, 2);
+  p5Sketch.rect(outer.x, outer.y, outer.w, outer.h); // outer
+  p5Sketch.rect(inner.x, inner.y, inner.w, inner.h); // outer
+  p5Sketch.rect(inner.x, inner.y + inner.h / 2, inner.w, 2);
 
   if (ac) {
     airConditioner(inner.x + (inner.w / 2), inner.y, inner.h);
