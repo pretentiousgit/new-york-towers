@@ -4,9 +4,9 @@ import { windowDrawFnList } from './windows';
 
 const DEBUG = false;
 
-function drawBasicBuildingLayer(config, p5Sketch) {
+function drawBasicBuildingLayer(config) {
   const {
-    buildingOrigin, buildingWidth, storyY, groundFloor, height, lowerBoundWindowWidth
+    p5Sketch, buildingOrigin, buildingWidth, storyY, groundFloor, height, lowerBoundWindowWidth
   } = config;
 
   const buildingX = buildingOrigin[0];

@@ -60,7 +60,14 @@ const s = (p5Sketch) => {
     storyArray.forEach((story) => {
       // console.log(story);
       // fireEscapeGen(story, sk);
-      drawBasicBuildingLayer(story, p5Sketch);
+      /*
+        Here we pass the sketch object on every config
+        This is annoying and might be better handled with a state manager
+       */
+      drawBasicBuildingLayer({
+        p5Sketch,
+        ...story
+      });
     });
   };
 };
