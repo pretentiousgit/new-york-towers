@@ -40,8 +40,8 @@ function drawBasicBuildingLayer(config) {
     // draw a ground floor
     // this will necessitate hiking everything else up half a story
     console.log('ground floor settings', buildingX, storyY, buildingWidth, height);
-    p5Sketch.fill(223, 24, 24);
-    p5Sketch.rect(10, config.buildingHeight - height, 50, 50);
+    // p5Sketch.fill(223, 24, 24);
+    // p5Sketch.rect(10, config.buildingHeight - height, 50, 50);
   }
 
   if (DEBUG) {
