@@ -1,6 +1,6 @@
 import {
   getBool, getRandomIntInclusive, range, goldenRatioTallRectangle
-} from './utils';
+} from '../library/utils';
 import { windowDrawFnList } from './windows';
 
 function buildingGenerator(config) {

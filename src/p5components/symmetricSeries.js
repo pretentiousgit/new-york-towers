@@ -1,7 +1,7 @@
 import { drawAirConditioner } from './drawAirConditioner';
 import {
   getRandomIntInclusive, isEven, getBool, range
-} from './utils';
+} from '../library/utils';
 
 /*
     numberOfWindows: numberOfWindows,

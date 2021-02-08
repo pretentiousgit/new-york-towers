@@ -1,5 +1,5 @@
 /// This literally draws a fire escape, story by story.
-import { getRandomIntInclusive, range } from './utils';
+import { getRandomIntInclusive, range } from '../library/utils';
 
 function drawFireEscapeLayer(settings) {
   const {

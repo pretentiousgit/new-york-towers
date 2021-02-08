@@ -1,6 +1,6 @@
 import {
   matrix, getRandomIntInclusive, isEven
-} from './utils';
+} from '../library/utils';
 
 import { genGoldenRectangleWindow } from './generators';
 import { drawAirConditioner } from './drawAirConditioner';

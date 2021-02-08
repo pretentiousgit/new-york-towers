@@ -1,4 +1,4 @@
-import { getRandomIntInclusive } from './utils';
+import { getRandomIntInclusive } from '../library/utils';
 import { symmetricWindowSeries } from './symmetricSeries';
 
 const DEBUG = false;

@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import * as P5 from './vendor/p5.min';
 
-import buildingGenerator from './components/buildingGenerator';
-import storyGenerator from './components/storyGenerator';
-import { fireEscapeGen } from './components/fireEscapeGen';
-import { drawBasicBuildingLayer } from './components/drawBasicBuildingLayer';
+import buildingGenerator from './p5components/buildingGenerator';
+import storyGenerator from './p5components/storyGenerator';
+import { fireEscapeGen } from './p5components/fireEscapeGen';
+import { drawBasicBuildingLayer } from './p5components/drawBasicBuildingLayer';
 
 function logger(str) {
   console.log(str);
@@ -39,7 +39,8 @@ const buildingConfig = {
 
 const s = (p5Sketch) => {
   p5Sketch.setup = () => {
-    p5Sketch.createCanvas(...canvas);
+    const canvasObj = p5Sketch.createCanvas(...canvas);
+    canvasObj.parent('canvasHolder');
     p5Sketch.frameRate(0.25);
   };
 
