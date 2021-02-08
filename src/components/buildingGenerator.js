@@ -9,6 +9,7 @@ function buildingGenerator(config) {
   } = config;
 
   const windowStyle = windowDrawFnList[0]; // debug: drawSquarePaneWindow
+  // const windowStyle = windowDrawFnList[getRandomIntInclusive(0, windowDrawFnList.length - 1)]; // debug: drawSquarePaneWindow
   const stories = range(getRandomIntInclusive(minStories, maxStories));
   const storyHeight = Math.round(canvas[1] / stories.length);
 
