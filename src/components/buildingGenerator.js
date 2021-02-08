@@ -27,10 +27,14 @@ function buildingGenerator(config) {
   const mirrored = true; // getBool();
   const curvy = true; // getBool();
 
+  // we are going to mutate this because why not be a bad cat.
+  const totalAirConditioners = range(stories.reduce((level) => level + getRandomIntInclusive(0, 3), '0'));
+
   return {
     ...config,
     windowStyle,
     windowWidth,
+    totalAirConditioners,
     acWidth,
     buildingOrigin: [buildingX, buildingY],
     buildingHeight: storyHeight * stories.length,

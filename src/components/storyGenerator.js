@@ -31,7 +31,6 @@ function storyGenerator(buildingNumbers, sk) {
       storyY
     };
   });
-
   return storyArray;
 }
 

@@ -40,7 +40,7 @@ const buildingConfig = {
 const s = (p5Sketch) => {
   p5Sketch.setup = () => {
     p5Sketch.createCanvas(...canvas);
-    p5Sketch.frameRate(0.5);
+    p5Sketch.frameRate(0.25);
   };
 
   p5Sketch.draw = () => { // "Draw" updates every tick, on the java model of canvas animation

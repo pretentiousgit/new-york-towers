@@ -1,5 +1,7 @@
-import { airConditioner as drawAirConditioner } from './drawAirConditioner';
-import { getRandomIntInclusive, isEven } from './utils';
+import { drawAirConditioner } from './drawAirConditioner';
+import {
+  getRandomIntInclusive, isEven, getBool, range
+} from './utils';
 
 /*
     numberOfWindows: numberOfWindows,
@@ -13,13 +15,21 @@ function getPairSets(numberOfWindows) {
     : numberOfWindows / 2;
 }
 
+function airConConfig(config, totalAC) {
+  let replyConfig;
+  if (getBool() && totalAC.length > 0) {
+    totalAC.pop(); // TODO: HERE IT IS WE DID A MUTATE
+    replyConfig = { ...config, ac: true };
+  } else {
+    replyConfig = { ...config, ac: false };
+  }
+  return replyConfig;
+}
+
 function symmetricWindowSeries(config) {
   const {
-    p5Sketch, numberOfWindows, buildingWidth, drawWindowFn, windowWidth, y, buildingX
+    p5Sketch, numberOfWindows, buildingWidth, drawWindowFn, windowWidth, y, buildingX, totalAirConditioners
   } = config;
-
-  const ac = getRandomIntInclusive(0, numberOfWindows);
-  const acCount = 0;
 
   const pairs = getPairSets(numberOfWindows);
 
@@ -27,12 +37,14 @@ function symmetricWindowSeries(config) {
   const centeredX = (buildingX + buildingWidth / 2) - windowWidth / 2;
 
   console.log('airConditioners', drawAirConditioner);
+
   const windowConfig = {
-    p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, ac, acWidth: config.acWidth
+    p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, acWidth: config.acWidth
   };
 
   if (!isEven(numberOfWindows)) {
-    drawWindowFn(windowConfig);
+    const middleConfig = airConConfig(windowConfig, totalAirConditioners);
+    drawWindowFn(middleConfig);
   }
 
   for (let i = 0; i < pairs; i += 1) {
@@ -56,8 +68,11 @@ function symmetricWindowSeries(config) {
     const xL = farLeftEdge + howManyIntervals + windowWidthTweak;
     const xR = farRightEdge - howManyIntervals - windowWidthTweak;
 
-    drawWindowFn({ ...windowConfig, x: xL });
-    drawWindowFn({ ...windowConfig, x: xR });
+    // determine how many air conditioners we have to give out
+    const pairConfig1 = airConConfig(windowConfig, totalAirConditioners);
+    const pairConfig2 = airConConfig(windowConfig, totalAirConditioners);
+    drawWindowFn({ ...pairConfig1, x: xL });
+    drawWindowFn({ ...pairConfig2, x: xR });
     // debugger;
   }
 }
