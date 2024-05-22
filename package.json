@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node_modules/.bin/webpack serve --open",
+    "start": "NODE_OPTIONS=--openssl_legacy_provider node_modules/.bin/webpack serve --open",
     "build": "webpack"
   },
   "repository": {
@@ -31,8 +31,8 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.19.1",
     "webpack": "^5.12.3",
-    "webpack-cli": "^4.3.1",
-    "webpack-dev-server": "^3.11.1"
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.9.2"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",

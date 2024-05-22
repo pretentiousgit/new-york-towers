@@ -1,7 +1,6 @@
 import { drawAirConditioner } from './drawAirConditioner';
-import {
-  getRandomIntInclusive, isEven, getBool, range
-} from '../library/utils';
+import isEven from '../utils/isEven';
+import getBool from '../utils/getBool';
 
 /*
     numberOfWindows: numberOfWindows,
@@ -9,6 +8,7 @@ import {
     buildingOrigin: buildingX,
     buildingWidth: buildingWidth
 */
+
 function getPairSets(numberOfWindows) {
   return (!isEven(numberOfWindows))
     ? (numberOfWindows - 1) / 2
@@ -26,7 +26,7 @@ function airConConfig(config, totalAC) {
   return replyConfig;
 }
 
-function symmetricWindowSeries(config) {
+function drawWindowSeries(config) {
   const {
     p5Sketch, numberOfWindows, buildingWidth, drawWindowFn, windowWidth, y, buildingX, totalAirConditioners
   } = config;
@@ -36,7 +36,7 @@ function symmetricWindowSeries(config) {
   const centerLine = buildingX + buildingWidth / 2;
   const centeredX = (buildingX + buildingWidth / 2) - windowWidth / 2;
 
-  console.log('airConditioners', drawAirConditioner);
+  // console.log('airConditioners', drawAirConditioner);
 
   const windowConfig = {
     p5Sketch, drawWindowFn, x: centeredX, y, w: windowWidth, acWidth: config.acWidth
@@ -77,4 +77,4 @@ function symmetricWindowSeries(config) {
   }
 }
 
-export { symmetricWindowSeries };
+export default drawWindowSeries;

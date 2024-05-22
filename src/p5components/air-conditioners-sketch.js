@@ -4,12 +4,12 @@ const canvas = [960, 600];
 const stories = 4;
 
 const buildingWidth = canvas[0] / 2;
-const storyHeight = canvas[1] / stories;
+const storyHeight = canvasH / stories;
 const storyBlock = [buildingWidth, storyHeight];
 
-const margin = (canvas[0] - buildingWidth) / 2; // center the building
+const margin = (canvasW - buildingWidth) / 2; // center the building
 
-const buildingOrigin = [margin, canvas[1] - (storyHeight + 10)];
+const buildingOrigin = [margin, canvasH - (storyHeight + 10)];
 
 function setup() {
   createCanvas(...canvas); // createCanvas must be the first statement
@@ -33,8 +33,6 @@ function draw() {
 }
 
 function basicStory(o = buildingOrigin, size = storyBlock) {
-  // console.log('add a story', o, size);
-
   const baseBlock = rect(...o, ...size);
 
   // symmetricSeries(getRandomIntInclusive(1, 7), airConditioner, airConditionerNumbers );

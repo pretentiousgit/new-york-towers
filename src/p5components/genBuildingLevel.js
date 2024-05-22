@@ -1,6 +1,6 @@
-import { getRandomIntInclusive } from '../library/utils';
+import getRandomIntInclusive from '../utils/getRandomIntInclusive';
 
-function storyGenerator(buildingNumbers, sk) {
+function storyGenerator(buildingNumbers) {
   const {
     windowStyle,
     stories,
@@ -13,17 +13,17 @@ function storyGenerator(buildingNumbers, sk) {
     // they do not have fire escapes
     // and have wildly unique windows
     // this is supposed to set if we're at the BOTTOM of the building, which is ironically the _largest_ number;
-    const groundFloor = Boolean(i === stories.length - 1);
-    const height = (!groundFloor) ? storyHeight : storyHeight * 1.5;
-    const numberOfWindows = (!groundFloor) ? getRandomIntInclusive(2, 5) : null;
-    const drawWindowFn = (!groundFloor) ? windowStyle : null;
+    // We have to test for ground floor because it's drawn last but it's needed for spacing
+    // const groundFloor = Boolean(i === stories.length - 1);
+    const height = storyHeight;
+    const numberOfWindows = getRandomIntInclusive(2, 5);
+    const drawWindowFn = windowStyle;
 
     const lineY = height * i;
     const storyY = height * i;
 
     return {
       ...rest,
-      groundFloor,
       height,
       numberOfWindows,
       drawWindowFn,

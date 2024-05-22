@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -9,13 +10,15 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: './dist'
+    static: './dist'
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        // exclude: /(node_modules)/,
+        exclude: [
+          path.resolve(__dirname, '/server_utils/*')
+        ],
         use: {
           loader: 'babel-loader',
           options: {
@@ -24,5 +27,10 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  externals: {
+    // Exclude all files in server_utils from bundles  
+    './server_utils': 'commonjs ./server_utils'  
+  },
+  plugins: [new webpack.IgnorePlugin({resourceRegExp: /server_utils/ })]
 };

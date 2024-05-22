@@ -1,8 +1,6 @@
 import { getRandomIntInclusive, isEven } from './utils';
 
 function column(n, x, y) {
-  // console.log('draw a column', n, x);
-
   // middle
   let c = color(241, 170, 100);
   fill(c);
