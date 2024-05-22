@@ -1,20 +1,27 @@
-import { getRandomIntInclusive } from '../library/utils';
-import { symmetricWindowSeries } from './symmetricSeries';
+import drawWindowSeries from './drawWindowSeries';
 
 const DEBUG = false;
 
-function drawBasicBuildingLayer(config) {
+export default function drawBasicBuildingLayer(config) {
   const {
-    p5Sketch, buildingOrigin, buildingWidth, storyY, groundFloor, height
+    p5Sketch,
+    buildingOrigin,
+    buildingWidth,
+    storyY,
+    height,
+    groundFloor,
+    topFloor
   } = config;
 
   const buildingX = buildingOrigin[0];
-
+  const storyVisible = false; // let's make drawing the box for the data optional
+  // const groundFloor = Boolean(currentStory === maxStories - 1);
   // Draw a box for a story
-  p5Sketch.stroke(0, 0, 0);
-  p5Sketch.noFill();
-  p5Sketch.rect(buildingX, storyY, buildingWidth, height);
-
+  if (storyVisible) {
+    p5Sketch.stroke(0, 0, 0);
+    p5Sketch.noFill();
+    p5Sketch.rect(buildingX, storyY, buildingWidth, height);
+  }
   /*
     What should happen:
     ==> Generate a building with a window style and a blank ground floor
@@ -27,14 +34,15 @@ function drawBasicBuildingLayer(config) {
   // fireEscapeLayer(fireW, h, fireX, y, index);
 
   //  Window type is set per building by buildingGenerator
-  const symmetricSettings = {
+  const drawWindowSettings = {
     ...config,
     buildingX,
-    y: storyY + 10 /* - (10 * scaleWeight) */ //   y
+    // y: storyY + 20 /* This is the vertical position of the window */
+    y: storyY + (height / 4) /* This is the vertical position of the window */
   };
 
-  if (!groundFloor) {
-    symmetricWindowSeries(symmetricSettings);
+  if (!groundFloor && !topFloor) {
+    drawWindowSeries(drawWindowSettings);
   } else {
     // TODO: it's extremely EXTREMELY confusing to draw down from the top left corner!
     // draw a ground floor
@@ -53,5 +61,3 @@ function drawBasicBuildingLayer(config) {
     p5Sketch.stroke(0, 0, 0);
   }
 }
-
-export { drawBasicBuildingLayer };
