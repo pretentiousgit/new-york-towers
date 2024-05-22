@@ -15,7 +15,6 @@ When you boot the code, you will get a new tenement apartment with slightly diff
 * Place the index.html file in `/dist` 
 * `npm start`
 
-
 This will start a webpack development server on port 8080, and run whatever sample code you have in the server in a new browser window. 
 
 The development server has hot reloading, but it is slow.
