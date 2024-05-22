@@ -1,5 +1,5 @@
 # P5Js Webpack Boilerplate
-
+Hello world
 This emerged out of a procedural generation project about towers and fire escapes, built for ITPCamp 2019.
 
 It was developed to provide a React-like build environment for P5.js canvas drawing projects, allowing for a little better debug and tweaking. It assumes use of `import` statements and code separation and an interest in functional programming. 
